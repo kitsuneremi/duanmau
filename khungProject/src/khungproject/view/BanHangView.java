@@ -5,12 +5,16 @@ import java.text.SimpleDateFormat;
 import khungproject.Repo.Repo;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import khungproject.Modelx.GioHangChiTietModel;
 import khungproject.Modelx.HoaDonChiTietModel;
 import khungproject.Modelx.ChiTietSPModel;
 import khungproject.Modelx.GioHangModel;
+import khungproject.Modelx.HoaDonModel;
 import khungproject.Modelx.SanPhamModel;
 
 public class BanHangView extends javax.swing.JFrame {
@@ -307,9 +311,9 @@ public class BanHangView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
+                        .addGap(50, 50, 50)
                         .addComponent(btntaohoadon)
-                        .addGap(51, 51, 51)
+                        .addGap(41, 41, 41)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(67, 67, 67)
@@ -327,22 +331,19 @@ public class BanHangView extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(58, 58, 58)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(btntaohoadon))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btntaohoadon))
+                        .addGap(41, 41, 41)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(41, 41, 41)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnthem)
-                                .addGap(15, 15, 15)))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnthem)
+                        .addGap(15, 15, 15)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -356,19 +357,18 @@ public class BanHangView extends javax.swing.JFrame {
     }//GEN-LAST:event_txttongtienActionPerformed
 
     private void btntaohoadonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntaohoadonActionPerformed
-
         DefaultTableModel dtma = (DefaultTableModel) tblgiohang.getModel();
         int y = dtma.getRowCount();
         if (y == 0) {
             JOptionPane.showMessageDialog(this, "gio hang cua ban con moi cai nit");
             return;
         }
-        int tongtien = 0;
+        /*int tongtien = 0;
         for (int i = 0; i < y; i++) {
             tongtien += Integer.parseInt(tblgiohang.getValueAt(i, 5).toString());
-        }
-        GioHangChiTietModel gdm = new GioHangChiTietModel();
+        }*/
 
+        //ngày tạo
         Calendar cld = Calendar.getInstance();
         int day = cld.get(Calendar.DAY_OF_MONTH);
         int month = cld.get(Calendar.MONTH);
@@ -377,23 +377,35 @@ public class BanHangView extends javax.swing.JFrame {
         int hour = cld.get(Calendar.HOUR_OF_DAY);
         int minute = cld.get(Calendar.MINUTE);
         int second = cld.get(Calendar.SECOND);
-        String date = (hour + ":" + minute + ":" + second + "-" + day + "/" + month + "/" + year);
-
+        String time = (hour + ":" + minute + ":" + second + "-" + day + "/" + month + "/" + year);
+        String date = day + "/" + month + "/" + year;
+        
+        
         //gen mã hóa đơn
         String mahd = rdn();
-
-        DefaultTableModel dtmb = (DefaultTableModel) tbltinhtrang.getModel();
-
-        Object[] rowData = {
-            dtmb.getRowCount() + 1,
-            mahd,
-            date,
-            txttennv.getText(),
-            "chờ thanh toán"
-        };
-        dtmb.addRow(rowData);
-
-        HoaDonChiTietModel hdm = new HoaDonChiTietModel();
+        
+        //luu hoa don vao db
+        HoaDonChiTietModel hdctm = new HoaDonChiTietModel();
+        HoaDonModel hdm = new HoaDonModel();
+        ChiTietSPModel ctspm = new ChiTietSPModel();
+        
+        hdm.setMa(mahd);
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date d = sdf.parse(date);
+            System.out.println(d);
+            hdm.setNgaytao(d);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ;
+        }
+        ctspm.setId(repo.traidctsp(repo.traidsp(tblgiohang.getValueAt(0, 1).toString())));
+        ctspm.setGiaban(Float.parseFloat(tblgiohang.getValueAt(0, 4).toString()));
+        hdctm.setSoluong(Integer.parseInt(tblgiohang.getValueAt(0, 3).toString()));
+        hdctm.setSpm(ctspm);
+        repo.luuhoadon(hdctm, hdm);
+        
+        loadhoadon();
 
         DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
         dtm.setRowCount(0);
@@ -404,18 +416,21 @@ public class BanHangView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnthanhtoanActionPerformed
 
-//    private void loadhoadon() {
-//        DefaultTableModel dtm = (DefaultTableModel) tbltinhtrang.getModel();
-//        dtm.setRowCount(0);
-//        ArrayList<HoaDonChiTietModel> list = repo.dochoadon();
-//        for (HoaDonChiTietModel x : list) {
-//            Object[] rowData = {
-//                dtm.getRowCount() + 1,
-//
-//            };
-//            dtm.addRow(rowData);
-//        }
-//    }
+    private void loadhoadon() {
+        DefaultTableModel dtm = (DefaultTableModel) tbltinhtrang.getModel();
+        dtm.setRowCount(0);
+        ArrayList<HoaDonModel> list = repo.loadhoadon();
+        for (HoaDonModel x : list) {
+            Object[] rowData = {
+                dtm.getRowCount() + 1,
+                x.getMa(),
+                x.getNgaytao(),
+                "tuong trung",
+                status(x.getTinhtrang())
+            };
+            dtm.addRow(rowData);
+        }
+    }
 
     private String status(int i) {
         return switch (i) {

@@ -1,7 +1,8 @@
 package khungproject.Modelx;
 
-
 public class ChiTietSPModel {
+
+    private String id;
     private SanPhamModel spm;
     private String idnsx;
     private String idmausac;
@@ -11,6 +12,14 @@ public class ChiTietSPModel {
     private int soluongsp;
     private Float gianhap;
     private Float giaban;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public SanPhamModel getSpm() {
         return spm;
@@ -52,7 +61,6 @@ public class ChiTietSPModel {
         this.nambh = nambh;
     }
 
-
     public String getMota() {
         return mota;
     }
@@ -84,6 +92,5 @@ public class ChiTietSPModel {
     public void setGiaban(Float giaban) {
         this.giaban = giaban;
     }
-    
-    
+
 }

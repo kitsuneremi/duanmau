@@ -15,10 +15,4 @@ public static Connection connection(){
             return null;
         }
     }
-
-    public static void main(String[] args) {
-        connection();
-        System.out.println("ok");
-    }
-
 }

@@ -3,6 +3,8 @@ package khungproject.Repo;
 import khungproject.Modelx.ChiTietSPModel;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import khungproject.Modelx.SanPhamModel;
 
 public class ChiTietSPRepo {
@@ -256,6 +258,57 @@ public class ChiTietSPRepo {
                 return rs.getString(1);
             }
             return null;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public ArrayList<String> getcbbmau(){
+        try {
+            String sql = "select ten from mausac";
+            ArrayList<String> list = new ArrayList<>();
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(rs.getString(1));
+            }
+            return list;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public ArrayList<String> getcbbnsx(){
+    try {
+            String sql = "select ten from nsx";
+            ArrayList<String> list = new ArrayList<>();
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(rs.getString(1));
+            }
+            return list;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public ArrayList<String> getcbbdongsp(){
+    try {
+            String sql = "select ten from dongsp";
+            ArrayList<String> list = new ArrayList<>();
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(rs.getString(1));
+            }
+            return list;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;

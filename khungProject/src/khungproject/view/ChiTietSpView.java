@@ -2,6 +2,7 @@ package khungproject.view;
 
 
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import khungproject.Modelx.ChiTietSPModel;
@@ -15,6 +16,9 @@ public class ChiTietSpView extends javax.swing.JFrame {
     public ChiTietSpView() {
         initComponents();
         loadsp();
+        loadcbbdongsp();
+        loadcbbmausac();
+        loadcbbnsx();
     }
 
     public void loadsp(){
@@ -99,8 +103,6 @@ public class ChiTietSpView extends javax.swing.JFrame {
             }
         });
 
-        cbbmau.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ten01" }));
-
         jLabel1.setText("tên sp");
 
         jLabel2.setText("màu");
@@ -153,11 +155,7 @@ public class ChiTietSpView extends javax.swing.JFrame {
 
         jLabel4.setText("mã sp");
 
-        cbbnsx.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ten01" }));
-
         jLabel9.setText("nsx");
-
-        cbbdongsp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ten01" }));
 
         jLabel10.setText("dòng sp");
 
@@ -305,9 +303,11 @@ public class ChiTietSpView extends javax.swing.JFrame {
         int row = tblsp.getSelectedRow();
         ChiTietSPModel spm = new ChiTietSPModel();
         SanPhamModel s = new SanPhamModel();
+        
         s.setId(repo.traidsp(tblsp.getValueAt(row, 1).toString()));
         s.setMa(tblsp.getValueAt(row, 0).toString());
         s.setTen(tblsp.getValueAt(row, 1).toString());
+        
         spm.setSpm(s);
         spm.setIdnsx(repo.traidnsx(tblsp.getValueAt(row, 2).toString()));
         spm.setIdmausac(repo.traidnsx(tblsp.getValueAt(row, 3).toString()));
@@ -344,6 +344,33 @@ public class ChiTietSpView extends javax.swing.JFrame {
         loadsp();
     }//GEN-LAST:event_btnxoaActionPerformed
 
+    void loadcbbnsx(){
+        ArrayList<String> list = repo.getcbbnsx();
+        DefaultComboBoxModel dcm = (DefaultComboBoxModel) cbbnsx.getModel();
+        dcm.removeAllElements();
+        for (String s : list) {
+            dcm.addElement(s);
+        }
+    }
+    
+    void loadcbbmausac(){
+        ArrayList<String> list = repo.getcbbmau();
+        DefaultComboBoxModel dcm = (DefaultComboBoxModel) cbbmau.getModel();
+        dcm.removeAllElements();
+        for (String s : list) {
+            dcm.addElement(s);
+        }
+    }
+    
+    void loadcbbdongsp(){
+        ArrayList<String> list = repo.getcbbdongsp();
+        DefaultComboBoxModel dcm = (DefaultComboBoxModel) cbbdongsp.getModel();
+        dcm.removeAllElements();
+        for (String s : list) {
+            dcm.addElement(s);
+        }
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
