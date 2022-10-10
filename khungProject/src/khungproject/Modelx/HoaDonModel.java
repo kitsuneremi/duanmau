@@ -7,6 +7,7 @@ public class HoaDonModel {
     Date Ngaytao,Ngaythanhtoan,Ngayship,ngaynhan;
     int tinhtrang;
     String tennguoinhan,diachi,sdt;
+    Double dongia;
 
     public String getId() {
         return id;
@@ -102,6 +103,14 @@ public class HoaDonModel {
 
     public void setSdt(String sdt) {
         this.sdt = sdt;
+    }
+
+    public Double getDongia() {
+        return dongia;
+    }
+
+    public void setDongia(Double dongia) {
+        this.dongia = dongia;
     }
     
     

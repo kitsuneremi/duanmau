@@ -1,15 +1,17 @@
 package khungproject.view;
 
+import java.awt.Point;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import khungproject.Repo.Repo;
+import khungproject.Repo.HoaDonRepo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import khungproject.Modelx.GioHangChiTietModel;
 import khungproject.Modelx.HoaDonChiTietModel;
 import khungproject.Modelx.ChiTietSPModel;
@@ -17,17 +19,43 @@ import khungproject.Modelx.GioHangModel;
 import khungproject.Modelx.HoaDonModel;
 import khungproject.Modelx.SanPhamModel;
 
-public class BanHangView extends javax.swing.JFrame {
+public class HoaDonView extends javax.swing.JFrame {
 
-    private Repo repo = new Repo();
-
-    public BanHangView() {
+    private HoaDonRepo repo = new HoaDonRepo();
+    String makh;
+    public HoaDonView() {
         initComponents();
         loadsp();
-        DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
-        dtm.setRowCount(0);
+        loadhoadon();
+        sua1chut();
+        loadcbbmanhanvien();
     }
 
+    HoaDonView(String text) {
+        initComponents();
+        loadsp();
+        makh = text;
+        loadhoadon();
+        sua1chut();
+        loadcbbmanhanvien();
+    }
+
+    void sua1chut(){
+        TableColumnModel cot = new DefaultTableColumnModel();        
+        cot= tblhoadon.getColumnModel();      
+        tblhoadon.removeColumn(cot.getColumn(6));
+        tblhoadon.removeColumn(cot.getColumn(5));
+    }
+    
+    void loadcbbmanhanvien(){
+        DefaultComboBoxModel dcm = (DefaultComboBoxModel) cbbmanhanvien.getModel();
+        ArrayList<String> list = repo.loadcbbmanhanvien();
+        for (String s : list) {
+            dcm.addElement(s);
+        }
+    }
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -39,7 +67,7 @@ public class BanHangView extends javax.swing.JFrame {
         tblgiohang = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbltinhtrang = new javax.swing.JTable();
+        tblhoadon = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         txtmahoadon = new javax.swing.JTextField();
         txtngaytao = new javax.swing.JTextField();
@@ -54,6 +82,8 @@ public class BanHangView extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        cbbmanhanvien = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblsanpham = new javax.swing.JTable();
@@ -74,10 +104,7 @@ public class BanHangView extends javax.swing.JFrame {
 
         tblgiohang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "stt", "mã sp", "tên sp", "số lượng", "đơn giá", "thành tiền"
@@ -116,34 +143,36 @@ public class BanHangView extends javax.swing.JFrame {
                 .addGap(24, 24, 24))
         );
 
-        tbltinhtrang.setModel(new javax.swing.table.DefaultTableModel(
+        tblhoadon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "stt", "mã hóa đơn", "ngày tạo", "tên nv", "tình trạng"
+                "stt", "mã hóa đơn", "ngày tạo", "tên nv", "tình trạng", "thành tiền", "mã nhân viên"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tbltinhtrang.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblhoadon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbltinhtrangMouseClicked(evt);
+                tblhoadonMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tbltinhtrang);
+        jScrollPane1.setViewportView(tblhoadon);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         txtmahoadon.setEditable(false);
 
         txtngaytao.setEditable(false);
+
+        txttennv.setEditable(false);
 
         txttongtien.setEditable(false);
         txttongtien.addActionListener(new java.awt.event.ActionListener() {
@@ -179,6 +208,19 @@ public class BanHangView extends javax.swing.JFrame {
 
         jLabel6.setText("tiền thừa");
 
+        jLabel9.setText("mã nhân viên");
+
+        cbbmanhanvien.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cbbmanhanvienFocusLost(evt);
+            }
+        });
+        cbbmanhanvien.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                cbbmanhanvienPropertyChange(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -193,7 +235,8 @@ public class BanHangView extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel9))
                         .addGap(53, 53, 53)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtmahoadon, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
@@ -201,7 +244,8 @@ public class BanHangView extends javax.swing.JFrame {
                             .addComponent(txttennv)
                             .addComponent(txttongtien)
                             .addComponent(txttienkhachdua)
-                            .addComponent(txttienthua)))
+                            .addComponent(txttienthua)
+                            .addComponent(cbbmanhanvien, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(46, 46, 46)
                         .addComponent(btnthanhtoan)))
@@ -218,11 +262,15 @@ public class BanHangView extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtngaytao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(cbbmanhanvien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txttennv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(43, 43, 43)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txttongtien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
@@ -309,20 +357,18 @@ public class BanHangView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
                         .addComponent(btntaohoadon)
-                        .addGap(41, 41, 41)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnthem, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -363,10 +409,10 @@ public class BanHangView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "gio hang cua ban con moi cai nit");
             return;
         }
-        /*int tongtien = 0;
+        Double tongtien = 0.0;
         for (int i = 0; i < y; i++) {
-            tongtien += Integer.parseInt(tblgiohang.getValueAt(i, 5).toString());
-        }*/
+            tongtien += Double.parseDouble(tblgiohang.getValueAt(i, 5).toString());
+        }
 
         //ngày tạo
         Calendar cld = Calendar.getInstance();
@@ -377,7 +423,6 @@ public class BanHangView extends javax.swing.JFrame {
         int hour = cld.get(Calendar.HOUR_OF_DAY);
         int minute = cld.get(Calendar.MINUTE);
         int second = cld.get(Calendar.SECOND);
-        String time = (hour + ":" + minute + ":" + second + "-" + day + "/" + month + "/" + year);
         String date = day + "/" + month + "/" + year;
         
         
@@ -393,7 +438,6 @@ public class BanHangView extends javax.swing.JFrame {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Date d = sdf.parse(date);
-            System.out.println(d);
             hdm.setNgaytao(d);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -403,8 +447,8 @@ public class BanHangView extends javax.swing.JFrame {
         ctspm.setGiaban(Float.parseFloat(tblgiohang.getValueAt(0, 4).toString()));
         hdctm.setSoluong(Integer.parseInt(tblgiohang.getValueAt(0, 3).toString()));
         hdctm.setSpm(ctspm);
-        repo.luuhoadon(hdctm, hdm);
-        
+        repo.luuhoadon(hdctm, hdm,makh,tongtien);
+
         loadhoadon();
 
         DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
@@ -412,12 +456,27 @@ public class BanHangView extends javax.swing.JFrame {
     }//GEN-LAST:event_btntaohoadonActionPerformed
 
     private void btnthanhtoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthanhtoanActionPerformed
-
-
+        if(txttennv.getText() == ""){
+            JOptionPane.showMessageDialog(this, "chua chon nhan vien");
+            return ;
+        }else if(txttienkhachdua.getText().equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(this, "chua nhap so tien khach dua");
+            return ;
+        }
+        try{
+            Double.parseDouble(txttienkhachdua.getText());
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, "sai dinh dang tien");
+            return ;
+        }
+        
+        Date d = new Date();
+        repo.updatehoadon(1,d, txtmahoadon.getText());
+        loadhoadon();
     }//GEN-LAST:event_btnthanhtoanActionPerformed
 
     private void loadhoadon() {
-        DefaultTableModel dtm = (DefaultTableModel) tbltinhtrang.getModel();
+        DefaultTableModel dtm = (DefaultTableModel) tblhoadon.getModel();
         dtm.setRowCount(0);
         ArrayList<HoaDonModel> list = repo.loadhoadon();
         for (HoaDonModel x : list) {
@@ -425,8 +484,10 @@ public class BanHangView extends javax.swing.JFrame {
                 dtm.getRowCount() + 1,
                 x.getMa(),
                 x.getNgaytao(),
-                "tuong trung",
-                status(x.getTinhtrang())
+                x.getTennguoinhan(),
+                status(x.getTinhtrang()),
+                x.getDongia(),
+                repo.tramanhanvien(x.getIdnv())
             };
             dtm.addRow(rowData);
         }
@@ -444,19 +505,39 @@ public class BanHangView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tblsanphamMouseClicked
 
-    private void tbltinhtrangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbltinhtrangMouseClicked
-
-    }//GEN-LAST:event_tbltinhtrangMouseClicked
+    private void tblhoadonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblhoadonMouseClicked
+        int row = tblhoadon.getSelectedRow();
+        txtmahoadon.setText(tblhoadon.getValueAt(row, 1).toString());
+        txtngaytao.setText(tblhoadon.getValueAt(row, 2).toString());
+        try{
+            txttennv.setText(tblhoadon.getValueAt(row, 3).toString());
+        }catch(NullPointerException ex){
+            txttennv.setText("");
+        }
+        txttongtien.setText(tblhoadon.getModel().getValueAt(row, 5).toString());
+        try{
+            cbbmanhanvien.setSelectedItem(tblhoadon.getModel().getValueAt(row, 6));
+            txttennv.setText(repo.tratennhanvien(cbbmanhanvien.getSelectedItem().toString()));
+        }catch(NullPointerException ex){
+            cbbmanhanvien.setSelectedItem(1);
+            txttennv.setText("");
+        }       
+    }//GEN-LAST:event_tblhoadonMouseClicked
 
     private void txttienkhachduaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txttienkhachduaFocusLost
-        if (txttienkhachdua.getText().length() > 15) {
-            JOptionPane.showMessageDialog(this, "nhieu tien the???");
-            return;
-        } else if (Integer.parseInt(txttienkhachdua.getText()) > Integer.parseInt(txttongtien.getText())) {
-            txttienthua.setText(String.valueOf(Integer.parseInt(txttienkhachdua.getText()) - Integer.parseInt(txttongtien.getText())));
+        try{
+            if (txttienkhachdua.getText().length() > 15) {
+                JOptionPane.showMessageDialog(this, "nhieu tien the???");
+                return;
+            } else if (Double.parseDouble(txttienkhachdua.getText()) > Double.parseDouble(txttongtien.getText())) {
+                txttienthua.setText(String.valueOf(Double.parseDouble(txttienkhachdua.getText()) - Double.parseDouble(txttongtien.getText())));
+            }
+        }catch(NumberFormatException ex){
+            return ;
         }
     }//GEN-LAST:event_txttienkhachduaFocusLost
 
+    
     @SuppressWarnings("CallToPrintStackTrace")
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
         int row = tblsanpham.getSelectedRow();
@@ -464,10 +545,15 @@ public class BanHangView extends javax.swing.JFrame {
         if (row == -1) {
             return;
         }
+        
         txtnice.setText(tblsanpham.getValueAt(row, col).toString());
         if (tblgiohang.getRowCount() != 0) {
                 for (int i = 0; i < tblgiohang.getRowCount(); i++) {
                 if (tblsanpham.getValueAt(row, 1).equals(tblgiohang.getValueAt(i, 1))) {
+                    if(tblgiohang.getValueAt(i, 3).equals(tblsanpham.getValueAt(row, 5))){
+                        JOptionPane.showMessageDialog(this, "số lượng vượt quá");
+                        return ;
+                    }
                     tblgiohang.setValueAt((Integer.parseInt(tblgiohang.getValueAt(i, 3).toString()) + 1), i, 3);
                     tblgiohang.setValueAt((Integer.parseInt(tblgiohang.getValueAt(i, 3).toString()) * Float.parseFloat(tblgiohang.getValueAt(i, 4).toString())), i, 5);
                     return;
@@ -524,6 +610,19 @@ public class BanHangView extends javax.swing.JFrame {
         dtm.addRow(rowData);
     }//GEN-LAST:event_btnthemActionPerformed
 
+    private void cbbmanhanvienPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cbbmanhanvienPropertyChange
+        
+        
+    }//GEN-LAST:event_cbbmanhanvienPropertyChange
+
+    private void cbbmanhanvienFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbbmanhanvienFocusLost
+        try{
+            txttennv.setText(repo.tratennhanvien(cbbmanhanvien.getSelectedItem().toString()));
+        }catch(NullPointerException ex){
+            txttennv.setText("");
+        }
+    }//GEN-LAST:event_cbbmanhanvienFocusLost
+
     void loadsp() {
         DefaultTableModel dtm = (DefaultTableModel) tblsanpham.getModel();
         dtm.setRowCount(0);
@@ -557,21 +656,23 @@ public class BanHangView extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BanHangView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HoaDonView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BanHangView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HoaDonView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BanHangView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HoaDonView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BanHangView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HoaDonView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BanHangView().setVisible(true);
+                new HoaDonView().setVisible(true);
             }
         });
     }
@@ -591,6 +692,7 @@ public class BanHangView extends javax.swing.JFrame {
     private javax.swing.JButton btnthanhtoan;
     private javax.swing.JButton btnthem;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> cbbmanhanvien;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -599,6 +701,7 @@ public class BanHangView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -606,8 +709,8 @@ public class BanHangView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblgiohang;
+    private javax.swing.JTable tblhoadon;
     private javax.swing.JTable tblsanpham;
-    private javax.swing.JTable tbltinhtrang;
     private javax.swing.JTextField txtmahoadon;
     private javax.swing.JTextField txtngaytao;
     private javax.swing.JTextField txtnice;

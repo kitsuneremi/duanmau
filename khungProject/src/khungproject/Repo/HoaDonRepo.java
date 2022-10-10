@@ -1,15 +1,14 @@
 package khungproject.Repo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import khungproject.Modelx.ChiTietSPModel;
 import khungproject.Modelx.HoaDonChiTietModel;
 import khungproject.Modelx.HoaDonModel;
 import khungproject.Modelx.SanPhamModel;
 
-public class Repo {
+public class HoaDonRepo {
 
     public ArrayList<ChiTietSPModel> getlistsp() {
         try {
@@ -101,48 +100,40 @@ public class Repo {
     
     
     
-    public boolean luuhoadon(HoaDonChiTietModel hdctm,HoaDonModel hdm){
+    public boolean luuhoadon(HoaDonChiTietModel hdctm,HoaDonModel hdm,String makh,Double tongtien){
         try {
-            String sql = "insert into hoadonchitiet(idhoadon,idchitietsp,soluong,dongia) values (convert(uniqueidentifier,?),convert(uniqueidentifier,?),?,?)";
-            String sql2 = "insert into hoadon(id,idkh,idnv,ma,ngaytao,ngaythanhtoan,tinhtrang) values (newid(),convert(uniqueidentifier,'73FE85CB-5BD1-4C57-81CA-3A2974EF15DC'),convert(uniqueidentifier,'30F858CE-D607-44F2-A61D-B34FF91B4B94'),?,?,?,?)";
-            String sql3 = "select id from hoadon";
+            String s1 = "select id from khachhang where ma = ?";
+            String s2 = "declare @id uniqueidentifier;set @id = newid(); insert into hoadon(id,idkh,ma,ngaytao,tinhtrang) values (@id,convert(uniqueidentifier,?),?,?,?); insert into hoadonchitiet(idhoadon,idchitietsp,soluong,dongia) values (@id,convert(uniqueidentifier,?),?,?)";
             Connection conn = DBConnection.connection();
 
-            PreparedStatement ps = conn.prepareStatement(sql2);
-            ps.setString(1, hdm.getMa());
-            ps.setDate(2, new java.sql.Date(hdm.getNgaytao().getTime()));
-            ps.setDate(3, new java.sql.Date(hdm.getNgaytao().getTime()));
-            ps.setInt(4, hdm.getTinhtrang());
-            ps.executeUpdate();
-            ps.close();
-            
-            
-            String x = "";
-            ps = conn.prepareStatement(sql3);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                x = rs.getString(1);
+            String idkh = "";           
+            PreparedStatement ps = conn.prepareStatement(s1);
+            ps.setString(1, makh);
+            ResultSet rs1 = ps.executeQuery();
+            while(rs1.next()){
+                idkh = rs1.getString(1);
             }
             ps.close();
-            
-            
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, x);
-            ps.setString(2, hdctm.getSpm().getId());
-            ps.setInt(3, hdctm.getSoluong());
-            ps.setDouble(4, hdctm.getSpm().getGiaban());
-            ps.executeUpdate();
-            ps.close();
-            return true;
+            ps = conn.prepareStatement(s2);
+            ps.setString(1, idkh);
+            ps.setString(2, hdm.getMa());
+            ps.setDate(3, new java.sql.Date(hdm.getNgaytao().getTime()));
+            ps.setInt(4, hdm.getTinhtrang());
+            ps.setString(5, hdctm.getSpm().getId());
+            ps.setInt(6, hdctm.getSoluong());
+            ps.setDouble(7, tongtien);
+            return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
     }
     
+    
+    
     public ArrayList<HoaDonModel> loadhoadon(){
         try {
-            String sql = "select id,ma,ngaytao,idnv,tinhtrang from hoadon";
+            String sql = "select hoadon.id,hoadon.ma,hoadon.ngaytao,hoadon.idnv,hoadon.tinhtrang,hoadonchitiet.dongia from hoadon join hoadonchitiet on hoadonchitiet.idhoadon = hoadon.id";
             ArrayList<HoaDonModel> list = new ArrayList<>();
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -154,9 +145,77 @@ public class Repo {
                 hdm.setNgaytao(rs.getDate(3));
                 hdm.setIdnv(rs.getString(4));
                 hdm.setTinhtrang(rs.getInt(5));
+                hdm.setDongia(rs.getDouble(6));
                 list.add(hdm);
             }
             return list;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public boolean updatehoadon(int tinhtrang,Date ngaythanhtoan,String ma){
+        try {
+            String sql = "update hoadon set tinhtrang = ?,ngaythanhtoan = ? where ma = ?";
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, tinhtrang);
+            ps.setDate(2, new java.sql.Date(ngaythanhtoan.getTime()));
+            ps.setString(3, ma);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            System.out.println("loi o day");
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
+    public String tramanhanvien(String idnv){
+        try {
+            String sql = "select ma from nhanvien where id = convert(uniqueidentifier,?)";
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, idnv);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                return rs.getString(1);
+            }
+            return null;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public ArrayList<String> loadcbbmanhanvien(){
+        try {
+            ArrayList<String> list = new ArrayList<>();
+            String sql = "select ma from NhanVien";
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(rs.getString(1));
+            }
+            return list;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public String tratennhanvien(String ma){
+        try {
+            String sql = "select ten from NhanVien where ma = ?";
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, ma);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                return rs.getString(1);
+            }
+            return null;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;

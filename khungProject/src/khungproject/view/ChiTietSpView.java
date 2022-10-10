@@ -21,6 +21,10 @@ public class ChiTietSpView extends javax.swing.JFrame {
         loadcbbnsx();
     }
 
+    ChiTietSpView(String text) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public void loadsp(){
         ArrayList<ChiTietSPModel> list = repo.getlistsp();
         DefaultTableModel dtm = (DefaultTableModel) tblsp.getModel();
