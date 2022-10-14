@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JMenuItem;
 import javax.swing.table.DefaultTableModel;
+import khungproject.Modelx.DongSPModel;
+import khungproject.Modelx.MauSacModel;
+import khungproject.Modelx.NSXModel;
 
 /**
  *
@@ -17,6 +20,40 @@ public class test extends javax.swing.JFrame {
     public test() {
         initComponents();
 
+    }
+    
+    public DongSPModel encrypt3(String y){
+        DongSPModel dspm;
+        String id,ma,ten;
+        int last1 = 15;
+
+        for(int i = 10;i < y.length();i++){
+            if(y.substring(i, i+1).equals(",")){
+                last1 = i;
+                break;
+            }
+        }
+        id = y.substring(15, last1);
+
+        int last2 = last1+12;
+        for(int i = last1 + 5;i < 78;i++){
+            if(y.substring(i, i+1).equals(",")){
+                last2 = i;
+                break;
+            }
+        }
+        ma = y.substring(last1 + 5, last2);
+        int last3 = last2 + 6;
+        for(int i = last3;i< y.length();i++){
+            if(y.substring(i, i+1).equals("}")){
+                last3 = i;
+                break;
+            }
+        }
+        ten = y.substring(last2 + 6, last3);
+        dspm = new DongSPModel(id, ma, ten);
+        System.out.println(id);
+        return dspm;
     }
 
     @SuppressWarnings("unchecked")
@@ -93,12 +130,8 @@ public class test extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(txt2.getPassword().toString().equals(txt1.getText())){
-            System.out.println(txt2.getPassword().toString());
-            System.out.println("true");
-        }else{
-            System.out.println(txt2.getPassword().toString());
-        }
+        encrypt3("DongSPModel{id=1234567891011121314151617181920, ma=1234567, ten=1234567}");
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {

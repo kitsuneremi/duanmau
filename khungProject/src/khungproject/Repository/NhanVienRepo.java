@@ -1,4 +1,4 @@
-package khungproject.Repo;
+package khungproject.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;

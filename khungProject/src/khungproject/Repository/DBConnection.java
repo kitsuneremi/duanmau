@@ -1,5 +1,5 @@
 
-package khungproject.Repo;
+package khungproject.Repository;
 
 import java.sql.*;
 

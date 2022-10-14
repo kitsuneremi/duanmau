@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import khungproject.Modelx.KhachHangModel;
-import khungproject.Repo.DkyRepo;
+import khungproject.Repository.DkyRepo;
 
 public class dkyView extends javax.swing.JFrame {
     DkyRepo repo = new DkyRepo();

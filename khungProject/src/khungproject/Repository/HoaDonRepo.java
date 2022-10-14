@@ -1,4 +1,4 @@
-package khungproject.Repo;
+package khungproject.Repository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,6 +114,7 @@ public class HoaDonRepo {
                 idkh = rs1.getString(1);
             }
             ps.close();
+            
             ps = conn.prepareStatement(s2);
             ps.setString(1, idkh);
             ps.setString(2, hdm.getMa());
@@ -219,6 +220,20 @@ public class HoaDonRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+    
+    public boolean updateslsp(String ma){
+        try {
+            String sql = "update chitietsp set slsp = ? where ";
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, ma);
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 }

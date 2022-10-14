@@ -1,10 +1,8 @@
-package khungproject.Repo;
+package khungproject.Repository;
 
-//import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Date;
 import khungproject.Modelx.KhachHangModel;
 
 public class DkyRepo {
@@ -28,7 +26,7 @@ public class DkyRepo {
             }catch(NullPointerException ex){
                 ps.close();
                 String sql1 = "insert into khachhang(id,ma,ten,matkhau) values(newid(),?,?,?)";
-                PreparedStatement ps1 = conn.prepareStatement(sql);
+                PreparedStatement ps1 = conn.prepareStatement(sql1);
                 ps1.setString(1, khm.getMa());
                 ps1.setString(2, khm.getTen());
                 ps1.setString(3, khm.getMatkhau());

@@ -3,7 +3,7 @@ package khungproject.view;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import khungproject.Modelx.DangNhapModel;
-import khungproject.Repo.NhanVienRepo;
+import khungproject.Repository.NhanVienRepo;
 
 public class DangNhapView extends javax.swing.JFrame {
 
@@ -149,7 +149,7 @@ public class DangNhapView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "dang nhap thanh cong");
             if (rdonhanvien.isSelected()) {
                 this.dispose();
-                ChiTietSpView spview = new ChiTietSpView(txttaikhoan.getText());
+                ChiTietSpView spview = new ChiTietSpView();
                 spview.setVisible(true);
             } else {
                 this.dispose();

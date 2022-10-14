@@ -1,10 +1,13 @@
-package khungproject.Repo;
+package khungproject.Repository;
 
 import khungproject.Modelx.ChiTietSPModel;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import khungproject.Modelx.DongSPModel;
+import khungproject.Modelx.MauSacModel;
+import khungproject.Modelx.NSXModel;
 import khungproject.Modelx.SanPhamModel;
 
 public class ChiTietSPRepo {
@@ -49,37 +52,21 @@ public class ChiTietSPRepo {
 
     public boolean themsp(ChiTietSPModel spm) {
         try {
-            String sql = "insert into chitietsp(idsp,idnsx,idmausac,iddongsp,nambh,mota,soluongton,gianhap,giaban) values(convert(uniqueidentifier,?),convert(uniqueidentifier,?),convert(uniqueidentifier,?),convert(uniqueidentifier,?),?,?,?,?,?)";
-            String sql1 = "insert into SanPham(Id,Ma,Ten) values (newid(),?,?)";
-            String sql2 = "select id,ma,ten from sanpham";
+            String sql = "declare @id uniqueidentifier; set @id = newid(); insert into SanPham(Id,Ma,Ten) values (@id,?,?); insert into chitietsp(idsp,idnsx,idmausac,iddongsp,nambh,mota,soluongton,gianhap,giaban) values(@id,convert(uniqueidentifier,?),convert(uniqueidentifier,?),convert(uniqueidentifier,?),?,?,?,?,?)";
             Connection conn = DBConnection.connection();
 
-            PreparedStatement ps1 = conn.prepareStatement(sql1);
-            ps1.setString(1, spm.getSpm().getMa());
-            ps1.setString(2, spm.getSpm().getTen());
-            ps1.executeUpdate();
-
-            PreparedStatement ps2 = conn.prepareStatement(sql2);
-            ResultSet rs = ps2.executeQuery();
-
-            SanPhamModel s = new SanPhamModel();
-            while (rs.next()) {
-                s.setId(rs.getString(1));
-                s.setMa(rs.getString(2));
-                s.setTen(rs.getString(3));
-            }
-            spm.setSpm(s);
-
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, s.getId());
-            ps.setString(2, spm.getIdnsx());
-            ps.setString(3, spm.getIdmausac());
-            ps.setString(4, spm.getIddongsp());
-            ps.setInt(5, spm.getNambh());
-            ps.setString(6, spm.getMota());
-            ps.setInt(7, spm.getSoluongsp());
-            ps.setFloat(8, spm.getGianhap());
-            ps.setFloat(9, spm.getGiaban());
+            ps.setString(1, rdn());
+            ps.setString(2, spm.getSpm().getTen());
+
+            ps.setString(3, spm.getIdnsx());
+            ps.setString(4, spm.getIdmausac());
+            ps.setString(5, spm.getIddongsp());
+            ps.setInt(6, spm.getNambh());
+            ps.setString(7, spm.getMota());
+            ps.setInt(8, spm.getSoluongsp());
+            ps.setFloat(9, spm.getGianhap());
+            ps.setFloat(10, spm.getGiaban());
             ps.executeUpdate();
 
             return true;
@@ -91,17 +78,14 @@ public class ChiTietSPRepo {
 
     public boolean updatesp(ChiTietSPModel spm, String id) {
         try {
-            String sql = "update Chitietsp set idnsx = convert(uniqueidentifier,?),idmausac = convert(uniqueidentifier,?), iddongsp = convert(uniqueidentifier,?),nambh = ?,mota = ?,soluongton = ?,gianhap = ?,giaban = ? where idsp = convert(uniqueidentifier,?)";
-            String sql2 = "update sanpham set ma = ?, ten = ? where id = convert(uniqueidentifier,?)";
+            String sql = "update Chitietsp set idnsx = convert(uniqueidentifier,?), idmausac = convert(uniqueidentifier,?), iddongsp = convert(uniqueidentifier,?),nambh = ?,mota = ?,soluongton = ?,gianhap = ?,giaban = ? where idsp = convert(uniqueidentifier,?)";
+            String sql2 = "update sanpham set ten = ? where id = convert(uniqueidentifier,?)";
             Connection conn = DBConnection.connection();
 
             PreparedStatement ps1 = conn.prepareStatement(sql2);
-            ps1.setString(1, spm.getSpm().getMa());
-            ps1.setString(2, spm.getSpm().getTen());
-            ps1.setString(3, id);
+            ps1.setString(1, spm.getSpm().getTen());
+            ps1.setString(2, id);
             ps1.executeUpdate();
-            System.out.println(spm.getSpm().getMa());
-            System.out.println(spm.getMota());
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, spm.getIdnsx());
@@ -114,7 +98,6 @@ public class ChiTietSPRepo {
             ps.setFloat(8, spm.getGiaban());
             ps.setString(9, id);
             ps.executeUpdate();
-            System.out.println("");
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -124,6 +107,7 @@ public class ChiTietSPRepo {
 
     public boolean deletesp(String id) {
         try {
+
             String sql = "delete from chitietsp where idsp = convert(uniqueidentifier,?)";
             String sql2 = "delete from sanpham where id = convert(uniqueidentifier,?)";
             Connection conn = DBConnection.connection();
@@ -139,83 +123,35 @@ public class ChiTietSPRepo {
             ps1.close();
             return true;
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return false;
         }
 
     }
 
-    public String traidnsx(String ten) {
-        try {
-            String sql = "select id from nsx where ten = ?";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, ten);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
 
-    public String traiddongsp(String ten) {
+    public String traten(String loai, String id) {
         try {
-            String sql = "select id from dongsp where ten = ?";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, ten);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
+            String sql = "";
+            switch (loai) {
+                case "nsx":
+                    sql = "select ten from nsx where id = convert(uniqueidentifier,?)";
+                    break;
+                case "mausac":
+                    sql = "select ten from mausac where id = convert(uniqueidentifier,?)";
+                    break;
+                case "dongsp":
+                    sql = "select ten from dongsp where id = convert(uniqueidentifier,?)";
+                    break;
+                case "idsp":
+                    sql = "select id from sanpham where ten = ?";
+                    break;
+                case "idctsp":
+                    sql = "select id from chitietsp where idsp = convert(uniqueidentifier,?)";
+                    break;
+                default:
+                    sql = "select ten from dongsp where id = convert(uniqueidentifier,?)";
+                    break;
             }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public String traidmau(String ten) {
-        try {
-            String sql = "select id from mausac where ten = ?";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, ten);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public String traidsp(String ten) {
-        try {
-            String sql = "select id from sanpham where ten = ?";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, ten);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public String tratennsx(String id) {
-        try {
-            String sql = "select ten from nsx where id = convert(uniqueidentifier,?)";
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, id);
@@ -230,49 +166,58 @@ public class ChiTietSPRepo {
         }
     }
 
-    public String tratenmau(String id) {
+    public SanPhamModel traidsp1(String ma) {
         try {
-            String sql = "select ten from mausac where id = convert(uniqueidentifier,?)";
+            SanPhamModel spm = new SanPhamModel();
+            String sql = "select * from SanPham where ma = ?";
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, id);
+            ps.setString(1, ma);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return rs.getString(1);
+                spm.setId(rs.getString(1));
             }
-            return null;
+            return spm;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;
         }
     }
 
-    public String tratendongsp(String id) {
+    public ArrayList<MauSacModel> getcbbmau() {
         try {
-            String sql = "select ten from dongsp where id = convert(uniqueidentifier,?)";
+            String sql = "select * from mausac";
+            ArrayList<MauSacModel> list = new ArrayList<>();
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return rs.getString(1);
+                MauSacModel msm = new MauSacModel();
+                msm.setId(rs.getString(1));
+                msm.setMa(rs.getString(2));
+                msm.setTen(rs.getString(3));
+                list.add(msm);
             }
-            return null;
+            return list;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;
         }
     }
-    
-    public ArrayList<String> getcbbmau(){
+
+    public ArrayList<NSXModel> getcbbnsx() {
         try {
-            String sql = "select ten from mausac";
-            ArrayList<String> list = new ArrayList<>();
+            String sql = "select * from nsx";
+            ArrayList<NSXModel> list = new ArrayList<>();
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                list.add(rs.getString(1));
+            while (rs.next()) {
+                NSXModel nsxm = new NSXModel();
+                nsxm.setId(rs.getString(1));
+                nsxm.setMa(rs.getString(2));
+                nsxm.setTen(rs.getString(3));
+                list.add(nsxm);
             }
             return list;
         } catch (SQLException ex) {
@@ -280,16 +225,20 @@ public class ChiTietSPRepo {
             return null;
         }
     }
-    
-    public ArrayList<String> getcbbnsx(){
-    try {
-            String sql = "select ten from nsx";
-            ArrayList<String> list = new ArrayList<>();
+
+    public ArrayList<DongSPModel> getcbbdongsp() {
+        try {
+            String sql = "select * from dongsp";
+            ArrayList<DongSPModel> list = new ArrayList<>();
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                list.add(rs.getString(1));
+            while (rs.next()) {
+                DongSPModel dspm = new DongSPModel();
+                dspm.setId(rs.getString(1));
+                dspm.setMa(rs.getString(2));
+                dspm.setTen(rs.getString(3));
+                list.add(dspm);
             }
             return list;
         } catch (SQLException ex) {
@@ -297,21 +246,41 @@ public class ChiTietSPRepo {
             return null;
         }
     }
-    
-    public ArrayList<String> getcbbdongsp(){
-    try {
-            String sql = "select ten from dongsp";
-            ArrayList<String> list = new ArrayList<>();
+
+    private static String rdn() {
+        StringBuilder sb = new StringBuilder();
+        String b = "0123456789" + "abcdefghijklmnopqrstuvxyz";
+        for (int i = 0; i < 10; i++) {
+            int index = (int) (b.length() * Math.random());
+            sb.append(b.charAt(index));
+        }
+        return sb.toString();
+    }
+
+    public boolean deleteall(String idsp, String idctsp) {
+        try {
+            String s = "";
+
+            String s1 = "select idhoadon from hoadonchitiet where idchitietsp = convert(uniqueidentifier,?)";
+            String s2 = "delete from hoadonchitiet where idchitietsp = convert(uniqueidentifier,?); delete from hoadon where id = convert(uniqueidentifier,?);delete from chitietsp where id = convert(uniqueidentifier,?);delete from sanpham where id = convert(uniqueidentifier,?)";
             Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(s1);
+            ps.setString(1, idctsp);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                list.add(rs.getString(1));
+            while (rs.next()) {
+                s = rs.getString(1);
             }
-            return list;
+            ps.close();
+
+            ps = conn.prepareStatement(s2);
+            ps.setString(1, idctsp);
+            ps.setString(2, s);
+            ps.setString(3, idctsp);
+            ps.setString(4, idsp);
+            return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return null;
+            return false;
         }
     }
 }
