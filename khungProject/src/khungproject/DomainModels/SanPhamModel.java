@@ -1,5 +1,5 @@
 
-package khungproject.Modelx;
+package khungproject.DomainModels;
 
 
 public class SanPhamModel {

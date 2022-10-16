@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JMenuItem;
 import javax.swing.table.DefaultTableModel;
-import khungproject.Modelx.DongSPModel;
-import khungproject.Modelx.MauSacModel;
-import khungproject.Modelx.NSXModel;
+import khungproject.DomainModels.DongSPModel;
+import khungproject.DomainModels.MauSacModel;
+import khungproject.DomainModels.NSXModel;
 
 /**
  *

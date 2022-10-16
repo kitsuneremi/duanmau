@@ -1,13 +1,21 @@
-package khungproject.Modelx;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
+ */
+package khungproject.DomainModels;
 
-public class DongSPModel {
+/**
+ *
+ * @author Binh
+ */
+public class NSXModel {
 
     String id, ma, ten;
 
-    public DongSPModel() {
+    public NSXModel() {
     }
 
-    public DongSPModel(String id, String ma, String ten) {
+    public NSXModel(String id, String ma, String ten) {
         this.id = id;
         this.ma = ma;
         this.ten = ten;
@@ -39,7 +47,7 @@ public class DongSPModel {
 
     @Override
     public String toString() {
-        return "DongSPModel{" + "id=" + id + ", ma=" + ma + ", ten=" + ten + '}';
+        return "NSXModel{" + "id=" + id + ", ma=" + ma + ", ten=" + ten + '}';
     }
 
 }

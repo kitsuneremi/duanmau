@@ -2,7 +2,7 @@ package khungproject.view;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import khungproject.Modelx.DangNhapModel;
+import khungproject.DomainModels.DangNhapModel;
 import khungproject.Repository.NhanVienRepo;
 
 public class DangNhapView extends javax.swing.JFrame {

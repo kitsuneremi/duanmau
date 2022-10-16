@@ -2,7 +2,7 @@ package khungproject.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
-import khungproject.Modelx.DangNhapModel;
+import khungproject.DomainModels.DangNhapModel;
 
 public class NhanVienRepo {
     public ArrayList<DangNhapModel> dangnhapnhanvien(){

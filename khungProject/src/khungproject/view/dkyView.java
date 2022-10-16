@@ -3,7 +3,7 @@ package khungproject.view;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
-import khungproject.Modelx.KhachHangModel;
+import khungproject.DomainModels.KhachHangModel;
 import khungproject.Repository.DkyRepo;
 
 public class dkyView extends javax.swing.JFrame {

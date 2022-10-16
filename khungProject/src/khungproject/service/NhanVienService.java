@@ -1,7 +1,7 @@
 package khungproject.service;
 
 import java.util.ArrayList;
-import khungproject.Modelx.DangNhapModel;
+import khungproject.DomainModels.DangNhapModel;
 
 import khungproject.Repository.NhanVienRepo;
 

@@ -3,7 +3,7 @@ package khungproject.Repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import khungproject.Modelx.KhachHangModel;
+import khungproject.DomainModels.KhachHangModel;
 
 public class DkyRepo {
     public boolean dangky(KhachHangModel khm){

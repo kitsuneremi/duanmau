@@ -1,14 +1,14 @@
 package khungproject.Repository;
 
-import khungproject.Modelx.ChiTietSPModel;
+import khungproject.DomainModels.ChiTietSPModel;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import khungproject.Modelx.DongSPModel;
-import khungproject.Modelx.MauSacModel;
-import khungproject.Modelx.NSXModel;
-import khungproject.Modelx.SanPhamModel;
+import khungproject.DomainModels.DongSPModel;
+import khungproject.DomainModels.MauSacModel;
+import khungproject.DomainModels.NSXModel;
+import khungproject.DomainModels.SanPhamModel;
 
 public class ChiTietSPRepo {
 

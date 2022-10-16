@@ -1,4 +1,6 @@
-package khungproject.Modelx;
+package khungproject.DomainModels;
+
+import khungproject.DomainModels.SanPhamModel;
 
 public class ChiTietSPModel {
 

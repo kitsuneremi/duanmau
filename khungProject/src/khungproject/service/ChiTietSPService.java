@@ -5,11 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import khungproject.Modelx.ChiTietSPModel;
-import khungproject.Modelx.DongSPModel;
-import khungproject.Modelx.MauSacModel;
-import khungproject.Modelx.NSXModel;
-import khungproject.Modelx.SanPhamModel;
+import khungproject.DomainModels.ChiTietSPModel;
+import khungproject.DomainModels.DongSPModel;
+import khungproject.DomainModels.MauSacModel;
+import khungproject.DomainModels.NSXModel;
+import khungproject.DomainModels.SanPhamModel;
 import khungproject.Repository.ChiTietSPRepo;
 import khungproject.Repository.DBConnection;
 

@@ -1,6 +1,6 @@
 package khungproject.service;
 
-import khungproject.Modelx.KhachHangModel;
+import khungproject.DomainModels.KhachHangModel;
 
 import khungproject.Repository.DkyRepo;
 

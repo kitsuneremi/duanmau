@@ -1,4 +1,4 @@
-package khungproject.Modelx;
+package khungproject.DomainModels;
 
 import java.util.Date;
 
