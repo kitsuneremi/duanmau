@@ -1,6 +1,6 @@
 package khungproject.Repository;
 
-import khungproject.DomainModels.ChiTietSPModel;
+import khungproject.ViewModel.ChiTietSPViewModel;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -12,15 +12,15 @@ import khungproject.DomainModels.SanPhamModel;
 
 public class ChiTietSPRepo {
 
-    public ArrayList<ChiTietSPModel> getlistsp() {
+    public ArrayList<ChiTietSPViewModel> getlistsp() {
         try {
-            ArrayList<ChiTietSPModel> list = new ArrayList<>();
+            ArrayList<ChiTietSPViewModel> list = new ArrayList<>();
             String sql2 = "select SanPham.id, SanPham.Ma, SanPham.Ten, ChiTietSP.idnsx, ChiTietSP.idmausac, ChiTietSP.iddongsp, ChiTietSP.nambh, ChiTietSP.mota, ChiTietSP.soluongton, ChiTietSP.gianhap, ChiTietSP.giaban from SanPham join ChiTietSP on SanPham.Id = ChiTietSP.IdSP";
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql2);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                ChiTietSPModel spm = new ChiTietSPModel();
+                ChiTietSPViewModel spm = new ChiTietSPViewModel();
                 SanPhamModel s = new SanPhamModel();
 
                 s.setId(rs.getString(1));
@@ -50,7 +50,7 @@ public class ChiTietSPRepo {
 
     }
 
-    public boolean themsp(ChiTietSPModel spm) {
+    public boolean themsp(ChiTietSPViewModel spm) {
         try {
             String sql = "declare @id uniqueidentifier; set @id = newid(); insert into SanPham(Id,Ma,Ten) values (@id,?,?); insert into chitietsp(idsp,idnsx,idmausac,iddongsp,nambh,mota,soluongton,gianhap,giaban) values(@id,convert(uniqueidentifier,?),convert(uniqueidentifier,?),convert(uniqueidentifier,?),?,?,?,?,?)";
             Connection conn = DBConnection.connection();
@@ -76,7 +76,7 @@ public class ChiTietSPRepo {
         }
     }
 
-    public boolean updatesp(ChiTietSPModel spm, String id) {
+    public boolean updatesp(ChiTietSPViewModel spm, String id) {
         try {
             String sql = "update Chitietsp set idnsx = convert(uniqueidentifier,?), idmausac = convert(uniqueidentifier,?), iddongsp = convert(uniqueidentifier,?),nambh = ?,mota = ?,soluongton = ?,gianhap = ?,giaban = ? where idsp = convert(uniqueidentifier,?)";
             String sql2 = "update sanpham set ten = ? where id = convert(uniqueidentifier,?)";
@@ -282,5 +282,48 @@ public class ChiTietSPRepo {
             ex.printStackTrace();
             return false;
         }
+    }
+    
+    public ArrayList<String> g(String y) {
+        String id, ma, ten;
+        int a = 0;
+        int b = 0;
+        
+        for(int i = 0; i <y.length(); i++){
+            if(y.substring(i, i + 1).equals("=")){
+                a = i + 1;
+                break;
+            }
+        }
+
+        for (int i = 0; i < y.length(); i++) {
+            if (y.substring(i, i + 1).equals(",")) {
+                b = i;
+                break;
+            }
+        }
+        id = y.substring(a, b);
+
+        int c = b + 12;
+        for (int i = b + 5; i < 78; i++) {
+            if (y.substring(i, i + 1).equals(",")) {
+                c = i;
+                break;
+            }
+        }
+        ma = y.substring(b + 5, c);
+        int last3 = c + 6;
+        for (int i = last3; i < y.length(); i++) {
+            if (y.substring(i, i + 1).equals("}")) {
+                last3 = i;
+                break;
+            }
+        }
+        ten = y.substring(c + 6, last3);
+        ArrayList<String> list = new ArrayList<>();
+        list.add(id);
+        list.add(ma);
+        list.add(ten);
+        return list;
     }
 }

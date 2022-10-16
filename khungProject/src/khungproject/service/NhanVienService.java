@@ -2,18 +2,13 @@ package khungproject.service;
 
 import java.util.ArrayList;
 import khungproject.DomainModels.DangNhapModel;
-
 import khungproject.Repository.NhanVienRepo;
 
-public class NhanVienService {
+public interface NhanVienService {
 
-    private NhanVienRepo repo = new NhanVienRepo();
+    public NhanVienRepo repo = new NhanVienRepo();
 
-    public ArrayList<DangNhapModel> dangnhapnhanvien() {
-        return repo.dangnhapnhanvien();
-    }
+    public ArrayList<DangNhapModel> dangnhapnhanvien();
 
-    public ArrayList<DangNhapModel> dangnhapkhachhang() {
-        return repo.dangnhapkhachhang();
-    }
+    public ArrayList<DangNhapModel> dangnhapkhachhang();
 }

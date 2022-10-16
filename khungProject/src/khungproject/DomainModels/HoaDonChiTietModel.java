@@ -1,9 +1,11 @@
 package khungproject.DomainModels;
 
+import khungproject.ViewModel.ChiTietSPViewModel;
+
 public class HoaDonChiTietModel {
     String idhoadon;
     int soluong;
-    ChiTietSPModel spm;
+    ChiTietSPViewModel spm;
 
     public String getIdhoadon() {
         return idhoadon;
@@ -21,11 +23,11 @@ public class HoaDonChiTietModel {
         this.soluong = soluong;
     }
 
-    public ChiTietSPModel getSpm() {
+    public ChiTietSPViewModel getSpm() {
         return spm;
     }
 
-    public void setSpm(ChiTietSPModel spm) {
+    public void setSpm(ChiTietSPViewModel spm) {
         this.spm = spm;
     }
 

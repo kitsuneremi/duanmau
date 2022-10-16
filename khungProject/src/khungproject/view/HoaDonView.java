@@ -8,11 +8,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import khungproject.DomainModels.HoaDonChiTietModel;
-import khungproject.DomainModels.ChiTietSPModel;
+import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.DomainModels.HoaDonModel;
 import khungproject.DomainModels.SanPhamModel;
-import khungproject.ViewModel.ChiTietSPViewModel;
-import khungproject.service.HoaDonService;
+import khungproject.ViewModel.SanPhamViewModel;
+import khungproject.service.impl.HoaDonService;
 
 public class HoaDonView extends javax.swing.JFrame {
 
@@ -410,7 +410,7 @@ public class HoaDonView extends javax.swing.JFrame {
         //luu hoa don vao db
         HoaDonChiTietModel hdctm = new HoaDonChiTietModel();
         HoaDonModel hdm = new HoaDonModel();
-        ChiTietSPModel ctspm = new ChiTietSPModel();
+        ChiTietSPViewModel ctspm = new ChiTietSPViewModel();
 
         hdm.setMa(mahd);
         try {
@@ -457,7 +457,7 @@ public class HoaDonView extends javax.swing.JFrame {
         }
 
         Date d = new Date();
-        ChiTietSPViewModel ctspvm = new ChiTietSPViewModel();
+        SanPhamViewModel ctspvm = new SanPhamViewModel();
         ctspvm.setIdhd(ser.traidhoadon(txtmahoadon.getText()));
         ctspvm.setIdsp(ser.traidsp(tblgiohang.getValueAt(0, 1).toString()));
         ctspvm.setMasp(tblgiohang.getValueAt(0, 1).toString());
@@ -546,7 +546,7 @@ public class HoaDonView extends javax.swing.JFrame {
             }
         }
 
-        ChiTietSPModel sp = new ChiTietSPModel();
+        ChiTietSPViewModel sp = new ChiTietSPViewModel();
         SanPhamModel spm = new SanPhamModel();
 
         //set sanphammodel
@@ -562,8 +562,8 @@ public class HoaDonView extends javax.swing.JFrame {
         int month = cld.get(Calendar.MONTH);
         int year = cld.get(Calendar.YEAR);
 
-        ArrayList<ChiTietSPViewModel> list = new ArrayList<>();
-        ChiTietSPViewModel ctspvm = new ChiTietSPViewModel("",ser.traidsp(tblsanpham.getValueAt(row, 1).toString()),tblsanpham.getValueAt(row, 1).toString(), tblsanpham.getValueAt(row, 2).toString(), 1, Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()), Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()));
+        ArrayList<SanPhamViewModel> list = new ArrayList<>();
+        SanPhamViewModel ctspvm = new SanPhamViewModel("",ser.traidsp(tblsanpham.getValueAt(row, 1).toString()),tblsanpham.getValueAt(row, 1).toString(), tblsanpham.getValueAt(row, 2).toString(), 1, Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()), Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()));
         list.add(ctspvm);
         
         DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
@@ -594,8 +594,8 @@ public class HoaDonView extends javax.swing.JFrame {
     private void loadsp() {
         DefaultTableModel dtm = (DefaultTableModel) tblsanpham.getModel();
         dtm.setRowCount(0);
-        ArrayList<ChiTietSPModel> list = ser.getlistsp();
-        for (ChiTietSPModel x : list) {
+        ArrayList<ChiTietSPViewModel> list = ser.getlistsp();
+        for (ChiTietSPViewModel x : list) {
             Object[] rowData = {
                 dtm.getRowCount() + 1,
                 x.getSpm().getMa(),

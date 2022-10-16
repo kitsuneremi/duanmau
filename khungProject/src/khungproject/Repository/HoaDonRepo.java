@@ -8,23 +8,23 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import khungproject.DomainModels.ChiTietSPModel;
+import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.DomainModels.HoaDonChiTietModel;
 import khungproject.DomainModels.HoaDonModel;
 import khungproject.DomainModels.SanPhamModel;
-import khungproject.ViewModel.ChiTietSPViewModel;
+import khungproject.ViewModel.SanPhamViewModel;
 
 public class HoaDonRepo {
 
-    public ArrayList<ChiTietSPModel> getlistsp() {
+    public ArrayList<ChiTietSPViewModel> getlistsp() {
         try {
-            ArrayList<ChiTietSPModel> list = new ArrayList<>();
+            ArrayList<ChiTietSPViewModel> list = new ArrayList<>();
             String sql2 = "select SanPham.id, SanPham.Ma, SanPham.Ten, ChiTietSP.idnsx, ChiTietSP.idmausac, ChiTietSP.iddongsp, ChiTietSP.nambh, ChiTietSP.mota, ChiTietSP.soluongton, ChiTietSP.gianhap, ChiTietSP.giaban from SanPham join ChiTietSP on SanPham.Id = ChiTietSP.IdSP";
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql2);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                ChiTietSPModel spm = new ChiTietSPModel();
+                ChiTietSPViewModel spm = new ChiTietSPViewModel();
                 SanPhamModel s = new SanPhamModel();
 
                 s.setId(rs.getString(1));
@@ -154,7 +154,7 @@ public class HoaDonRepo {
         }
     }
 
-    public boolean updatehoadon(ChiTietSPViewModel ctspvm) {
+    public boolean updatehoadon(SanPhamViewModel ctspvm) {
         try {
             String s1 = "select id from chitietsp where idsp = convert(uniqueidentifier,?)";
             String s2 = "update hoadon set tinhtrang = 1,ngaythanhtoan = ? where id = convert(uniqueidentifier,?)";

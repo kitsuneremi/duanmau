@@ -1,78 +1,99 @@
 package khungproject.ViewModel;
 
+import khungproject.DomainModels.SanPhamModel;
+import khungproject.DomainModels.SanPhamModel;
+
 public class ChiTietSPViewModel {
 
-    public String idsp, idhd, masp, tensp;
-    int soluong;
-    double dongia, thanhtien;
+    private String id;
+    private SanPhamModel spm;
+    private String idnsx;
+    private String idmausac;
+    private String iddongsp;
+    private int nambh;
+    private String mota;
+    private int soluongsp;
+    private Float gianhap;
+    private Float giaban;
 
-    public ChiTietSPViewModel() {
+    public String getId() {
+        return id;
     }
 
-    public ChiTietSPViewModel(String idsp, String idhd, String masp, String tensp, int soluong, double dongia, double thanhtien) {
-        this.idsp = idsp;
-        this.idhd = idhd;
-        this.masp = masp;
-        this.tensp = tensp;
-        this.soluong = soluong;
-        this.dongia = dongia;
-        this.thanhtien = thanhtien;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getIdsp() {
-        return idsp;
+    public SanPhamModel getSpm() {
+        return spm;
     }
 
-    public void setIdsp(String idsp) {
-        this.idsp = idsp;
+    public void setSpm(SanPhamModel spm) {
+        this.spm = spm;
     }
 
-    public String getIdhd() {
-        return idhd;
+    public String getIdnsx() {
+        return idnsx;
     }
 
-    public void setIdhd(String idhd) {
-        this.idhd = idhd;
+    public void setIdnsx(String idnsx) {
+        this.idnsx = idnsx;
     }
 
-    public String getMasp() {
-        return masp;
+    public String getIdmausac() {
+        return idmausac;
     }
 
-    public void setMasp(String masp) {
-        this.masp = masp;
+    public void setIdmausac(String idmausac) {
+        this.idmausac = idmausac;
     }
 
-    public String getTensp() {
-        return tensp;
+    public String getIddongsp() {
+        return iddongsp;
     }
 
-    public void setTensp(String tensp) {
-        this.tensp = tensp;
+    public void setIddongsp(String iddongsp) {
+        this.iddongsp = iddongsp;
     }
 
-    public int getSoluong() {
-        return soluong;
+    public int getNambh() {
+        return nambh;
     }
 
-    public void setSoluong(int soluong) {
-        this.soluong = soluong;
+    public void setNambh(int nambh) {
+        this.nambh = nambh;
     }
 
-    public double getDongia() {
-        return dongia;
+    public String getMota() {
+        return mota;
     }
 
-    public void setDongia(double dongia) {
-        this.dongia = dongia;
+    public void setMota(String mota) {
+        this.mota = mota;
     }
 
-    public double getThanhtien() {
-        return thanhtien;
+    public int getSoluongsp() {
+        return soluongsp;
     }
 
-    public void setThanhtien(double thanhtien) {
-        this.thanhtien = thanhtien;
+    public void setSoluongsp(int soluongsp) {
+        this.soluongsp = soluongsp;
+    }
+
+    public Float getGianhap() {
+        return gianhap;
+    }
+
+    public void setGianhap(Float gianhap) {
+        this.gianhap = gianhap;
+    }
+
+    public Float getGiaban() {
+        return giaban;
+    }
+
+    public void setGiaban(Float giaban) {
+        this.giaban = giaban;
     }
 
 }

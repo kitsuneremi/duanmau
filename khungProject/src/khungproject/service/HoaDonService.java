@@ -1,64 +1,43 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
 package khungproject.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
-import khungproject.DomainModels.ChiTietSPModel;
 import khungproject.DomainModels.HoaDonChiTietModel;
 import khungproject.DomainModels.HoaDonModel;
-import khungproject.Repository.DBConnection;
-
 import khungproject.Repository.HoaDonRepo;
 import khungproject.ViewModel.ChiTietSPViewModel;
+import khungproject.ViewModel.SanPhamViewModel;
 
-public class HoaDonService {
-
-    private HoaDonRepo repo = new HoaDonRepo();
-
-    public ArrayList<ChiTietSPModel> getlistsp() {
-        return repo.getlistsp();
-    }
-
-    public String tratensp(String id) {
-        return repo.tratensp(id);
-    }
-
-    public String traidctsp(String idsp) {
-        return repo.traidctsp(idsp);
-    }
-
-    public String traidsp(String ma) {
-        return repo.traidsp(ma);
-    }
-
-    public boolean luuhoadon(HoaDonChiTietModel hdctm, HoaDonModel hdm, String makh) {
-        return repo.luuhoadon(hdctm, hdm, makh);
-    }
-
-    public ArrayList<HoaDonModel> loadhoadon() {
-        return repo.loadhoadon();
-    }
-
-    public boolean updatehoadon(ChiTietSPViewModel ctspvm){
-        return repo.updatehoadon(ctspvm);
-    }
-
-    public String tramanhanvien(String idnv) {
-        return repo.tramanhanvien(idnv);
-    }
-
-    public ArrayList<String> loadcbbmanhanvien() {
-        return repo.loadcbbmanhanvien();
-    }
-
-    public String tratennhanvien(String ma) {
-        return repo.tratennhanvien(ma);
-    }
+/**
+ *
+ * @author Binh
+ */
+public interface HoaDonService {
     
-    public String traidhoadon(String ma){
-        return repo.traidhoadon(ma);
-    }
+    public HoaDonRepo repo = new HoaDonRepo();
+
+    public ArrayList<ChiTietSPViewModel> getlistsp();
+
+    public String tratensp(String id);
+
+    public String traidctsp(String idsp);
+
+    public String traidsp(String ma);
+
+    public boolean luuhoadon(HoaDonChiTietModel hdctm, HoaDonModel hdm, String makh);
+
+    public ArrayList<HoaDonModel> loadhoadon();
+
+    public boolean updatehoadon(SanPhamViewModel ctspvm);
+
+    public String tramanhanvien(String idnv);
+
+    public ArrayList<String> loadcbbmanhanvien();
+
+    public String tratennhanvien(String ma);
+    
+    public String traidhoadon(String ma);
 }

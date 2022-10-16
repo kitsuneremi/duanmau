@@ -2,21 +2,37 @@ package khungproject.ViewModel;
 
 public class SanPhamViewModel {
 
-    String masp, tensp, mota;
-    int nambh, slsp;
-    double gianhap, giaban;
+    public String idsp, idhd, masp, tensp;
+    int soluong;
+    double dongia, thanhtien;
 
     public SanPhamViewModel() {
     }
 
-    public SanPhamViewModel(String masp, String tensp, String mota, int nambh, int slsp, double gianhap, double giaban) {
+    public SanPhamViewModel(String idsp, String idhd, String masp, String tensp, int soluong, double dongia, double thanhtien) {
+        this.idsp = idsp;
+        this.idhd = idhd;
         this.masp = masp;
         this.tensp = tensp;
-        this.mota = mota;
-        this.nambh = nambh;
-        this.slsp = slsp;
-        this.gianhap = gianhap;
-        this.giaban = giaban;
+        this.soluong = soluong;
+        this.dongia = dongia;
+        this.thanhtien = thanhtien;
+    }
+
+    public String getIdsp() {
+        return idsp;
+    }
+
+    public void setIdsp(String idsp) {
+        this.idsp = idsp;
+    }
+
+    public String getIdhd() {
+        return idhd;
+    }
+
+    public void setIdhd(String idhd) {
+        this.idhd = idhd;
     }
 
     public String getMasp() {
@@ -35,44 +51,28 @@ public class SanPhamViewModel {
         this.tensp = tensp;
     }
 
-    public String getMota() {
-        return mota;
+    public int getSoluong() {
+        return soluong;
     }
 
-    public void setMota(String mota) {
-        this.mota = mota;
+    public void setSoluong(int soluong) {
+        this.soluong = soluong;
     }
 
-    public int getNambh() {
-        return nambh;
+    public double getDongia() {
+        return dongia;
     }
 
-    public void setNambh(int nambh) {
-        this.nambh = nambh;
+    public void setDongia(double dongia) {
+        this.dongia = dongia;
     }
 
-    public int getSlsp() {
-        return slsp;
+    public double getThanhtien() {
+        return thanhtien;
     }
 
-    public void setSlsp(int slsp) {
-        this.slsp = slsp;
-    }
-
-    public double getGianhap() {
-        return gianhap;
-    }
-
-    public void setGianhap(double gianhap) {
-        this.gianhap = gianhap;
-    }
-
-    public double getGiaban() {
-        return giaban;
-    }
-
-    public void setGiaban(double giaban) {
-        this.giaban = giaban;
+    public void setThanhtien(double thanhtien) {
+        this.thanhtien = thanhtien;
     }
 
 }

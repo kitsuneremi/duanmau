@@ -5,27 +5,28 @@ import javax.security.auth.callback.ConfirmationCallback;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import khungproject.DomainModels.ChiTietSPModel;
+import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.DomainModels.DongSPModel;
 import khungproject.DomainModels.MauSacModel;
 import khungproject.DomainModels.NSXModel;
 import khungproject.DomainModels.SanPhamModel;
 import khungproject.Repository.ChiTietSPRepo;
+import khungproject.service.impl.ChiTietSPService;
 
 public class ChiTietSpView extends javax.swing.JFrame {
 
-    private ChiTietSPRepo repo = new ChiTietSPRepo();
+    private ChiTietSPService ser = new ChiTietSPService();
 
     public ChiTietSpView() {
         initComponents();
         loadsp();
-        ArrayList<NSXModel> list1 = repo.getcbbnsx();
+        ArrayList<NSXModel> list1 = ser.getcbbnsx();
         DefaultComboBoxModel dcm1 = (DefaultComboBoxModel) cbbnsx.getModel();
         dcm1.removeAllElements();
-        ArrayList<MauSacModel> list2 = repo.getcbbmau();
+        ArrayList<MauSacModel> list2 = ser.getcbbmau();
         DefaultComboBoxModel dcm2 = (DefaultComboBoxModel) cbbmau.getModel();
         dcm2.removeAllElements();
-        ArrayList<DongSPModel> list3 = repo.getcbbdongsp();
+        ArrayList<DongSPModel> list3 = ser.getcbbdongsp();
         DefaultComboBoxModel dcm3 = (DefaultComboBoxModel) cbbdongsp.getModel();
         dcm3.removeAllElements();
         for (NSXModel x : list1) {
@@ -40,16 +41,16 @@ public class ChiTietSpView extends javax.swing.JFrame {
     }
 
     public void loadsp() {
-        ArrayList<ChiTietSPModel> list = repo.getlistsp();
+        ArrayList<ChiTietSPViewModel> list = ser.getlistsp();
         DefaultTableModel dtm = (DefaultTableModel) tblsp.getModel();
         dtm.setRowCount(0);
-        for (ChiTietSPModel x : list) {
+        for (ChiTietSPViewModel x : list) {
             Object[] rowData = {
                 x.getSpm().getMa(),
                 x.getSpm().getTen(),
-                repo.traten("nsx",x.getIdnsx()),
-                repo.traten("mausac",x.getIdmausac()),
-                repo.traten("dongsp",x.getIddongsp()),
+                ser.traten("nsx",x.getIdnsx()),
+                ser.traten("mausac",x.getIdmausac()),
+                ser.traten("dongsp",x.getIddongsp()),
                 x.getNambh(),
                 x.getMota(),
                 x.getSoluongsp(),
@@ -60,9 +61,9 @@ public class ChiTietSpView extends javax.swing.JFrame {
         }
     }
 
-    public ChiTietSPModel x(String b) {
+    public ChiTietSPViewModel x(String b) {
         try {
-            ChiTietSPModel spm = new ChiTietSPModel();
+            ChiTietSPViewModel spm = new ChiTietSPViewModel();
             SanPhamModel s = new SanPhamModel();
             if ("insert".equals(b)) {
                 s.setMa(rdn());
@@ -71,12 +72,9 @@ public class ChiTietSpView extends javax.swing.JFrame {
             }
             s.setTen(txttensp.getText());
             spm.setSpm(s);
-
-            System.out.println(cbbnsx.getSelectedItem().toString());
-            System.out.println(encrypt2(cbbnsx.getSelectedItem().toString()).getId());
-            NSXModel nsxm = new NSXModel(encrypt2(cbbnsx.getSelectedItem().toString()).getId(), encrypt2(cbbnsx.getSelectedItem().toString()).getMa(), encrypt2(cbbnsx.getSelectedItem().toString()).getTen());
-            MauSacModel msm = new MauSacModel(encrypt1(cbbmau.getSelectedItem().toString()).getId(), encrypt1(cbbmau.getSelectedItem().toString()).getMa(), encrypt1(cbbmau.getSelectedItem().toString()).getTen());
-            DongSPModel dspm = new DongSPModel(encrypt3(cbbdongsp.getSelectedItem().toString()).getId(), encrypt3(cbbdongsp.getSelectedItem().toString()).getMa(), encrypt3(cbbdongsp.getSelectedItem().toString()).getTen());
+            NSXModel nsxm = new NSXModel(ser.g(cbbnsx.getSelectedItem().toString()).get(0), ser.g(cbbnsx.getSelectedItem().toString()).get(1), ser.g(cbbnsx.getSelectedItem().toString()).get(2));
+            MauSacModel msm = new MauSacModel(ser.g(cbbmau.getSelectedItem().toString()).get(0), ser.g(cbbmau.getSelectedItem().toString()).get(1), ser.g(cbbmau.getSelectedItem().toString()).get(2));
+            DongSPModel dspm = new DongSPModel(ser.g(cbbdongsp.getSelectedItem().toString()).get(0), ser.g(cbbdongsp.getSelectedItem().toString()).get(1), ser.g(cbbdongsp.getSelectedItem().toString()).get(2));
 
             spm.setIdnsx(nsxm.getId());
             spm.setIdmausac(msm.getId());
@@ -319,18 +317,18 @@ public class ChiTietSpView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtnambhActionPerformed
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
-        ChiTietSPModel spm = x("insert");
-        repo.themsp(spm);
+        ChiTietSPViewModel spm = x("insert");
+        ser.themsp(spm);
         loadsp();
     }//GEN-LAST:event_btnthemActionPerformed
 
     private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
-        ChiTietSPModel spm = x("update");
+        ChiTietSPViewModel spm = x("update");
         int row = tblsp.getSelectedRow();
         if (row == -1) {
             return;
         }
-        repo.updatesp(spm, repo.traten("idsp",tblsp.getValueAt(row, 1).toString()));
+        ser.updatesp(spm, ser.traten("idsp",tblsp.getValueAt(row, 1).toString()));
         loadsp();
     }//GEN-LAST:event_btnsuaActionPerformed
 
@@ -342,20 +340,20 @@ public class ChiTietSpView extends javax.swing.JFrame {
 
         DefaultComboBoxModel dcm1 = (DefaultComboBoxModel) cbbnsx.getModel();
         for (int i = 0; i < dcm1.getSize(); i++) {
-            if (tblsp.getValueAt(row, 2).equals(encrypt2(cbbmau.getItemAt(i)).getTen())) {
+            if (tblsp.getValueAt(row, 2).equals(ser.g(cbbmau.getItemAt(i)).get(1))) {
                 cbbnsx.setSelectedIndex(i);
             }
         }
 
         DefaultComboBoxModel dcm2 = (DefaultComboBoxModel) cbbmau.getModel();
         for (int i = 0; i < dcm2.getSize(); i++) {
-            if (tblsp.getValueAt(row, 3).equals(encrypt1(cbbnsx.getItemAt(i)).getTen())) {
+            if (tblsp.getValueAt(row, 3).equals(ser.g(cbbnsx.getItemAt(i)).get(0))) {
                 cbbmau.setSelectedIndex(i);
             }
         }
         DefaultComboBoxModel dcm3 = (DefaultComboBoxModel) cbbdongsp.getModel();
         for (int i = 0; i < dcm3.getSize(); i++) {
-            if (tblsp.getValueAt(row, 4).equals(encrypt3(cbbdongsp.getItemAt(i)).getTen())) {
+            if (tblsp.getValueAt(row, 4).equals(ser.g(cbbdongsp.getItemAt(i)).get(2))) {
                 cbbdongsp.setSelectedIndex(i);
             }
         }
@@ -373,118 +371,19 @@ public class ChiTietSpView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "chua chon hang nao");
             return;
         }
-        boolean b = repo.deletesp(repo.traten("idsp",tblsp.getValueAt(row, 1).toString()));
+        boolean b = ser.deletesp(ser.traten("idsp",tblsp.getValueAt(row, 1).toString()));
         if(b == false){
             int a = JOptionPane.showConfirmDialog(this, "san pham nay dang nam trong 1 hoac nhieu hoa don, ban co muon xoa cac hoa don nay khong???" ,"co van de", JOptionPane.YES_NO_OPTION);
             if(a == JOptionPane.YES_OPTION){
                 String masp = tblsp.getValueAt(row, 0).toString();
-                String idsp = repo.traidsp1(masp).getId();
-                repo.deleteall(idsp,repo.traten("idctsp",idsp));
+                String idsp = ser.traidsp1(masp).getId();
+                ser.deleteall(idsp,ser.traten("idctsp",idsp));
             }else{
                 return ;
             }
         }
         loadsp();
     }//GEN-LAST:event_btnxoaActionPerformed
-
-    public MauSacModel encrypt1(String y) {
-        MauSacModel msm;
-        String id, ma, ten;
-        int last1 = 15;
-
-        for (int i = 10; i < y.length(); i++) {
-            if (y.substring(i, i + 1).equals(",")) {
-                last1 = i;
-                break;
-            }
-        }
-        id = y.substring(15, last1);
-
-        int last2 = last1 + 12;
-        for (int i = last1 + 5; i < 78; i++) {
-            if (y.substring(i, i + 1).equals(",")) {
-                last2 = i;
-                break;
-            }
-        }
-        ma = y.substring(last1 + 5, last2);
-        int last3 = last2 + 6;
-        for (int i = last3; i < y.length(); i++) {
-            if (y.substring(i, i + 1).equals("}")) {
-                last3 = i;
-                break;
-            }
-        }
-        ten = y.substring(last2 + 6, last3);
-        msm = new MauSacModel(id, ma, ten);
-        return msm;
-    }
-
-    public NSXModel encrypt2(String y) {
-        NSXModel nsxm;
-        String id, ma, ten;
-        int last1 = 15;
-
-        for (int i = 7; i < y.length(); i++) {
-            if (y.substring(i, i + 1).equals(",")) {
-                last1 = i;
-                break;
-            }
-        }
-        id = y.substring(12, last1);
-
-        int last2 = last1 + 12;
-        for (int i = last1 + 5; i < 78; i++) {
-            if (y.substring(i, i + 1).equals(",")) {
-                last2 = i;
-                break;
-            }
-        }
-        ma = y.substring(last1 + 5, last2);
-        int last3 = last2 + 6;
-        for (int i = last3; i < y.length(); i++) {
-            if (y.substring(i, i + 1).equals("}")) {
-                last3 = i;
-                break;
-            }
-        }
-        ten = y.substring(last2 + 6, last3);
-        nsxm = new NSXModel(id, ma, ten);
-        return nsxm;
-    }
-
-    public DongSPModel encrypt3(String y) {
-        DongSPModel dspm;
-        String id, ma, ten;
-        int last1 = 15;
-
-        for (int i = 10; i < y.length(); i++) {
-            if (y.substring(i, i + 1).equals(",")) {
-                last1 = i;
-                break;
-            }
-        }
-        id = y.substring(15, last1);
-
-        int last2 = last1 + 12;
-        for (int i = last1 + 5; i < 78; i++) {
-            if (y.substring(i, i + 1).equals(",")) {
-                last2 = i;
-                break;
-            }
-        }
-        ma = y.substring(last1 + 5, last2);
-        int last3 = last2 + 6;
-        for (int i = last3; i < y.length(); i++) {
-            if (y.substring(i, i + 1).equals("}")) {
-                last3 = i;
-                break;
-            }
-        }
-        ten = y.substring(last2 + 6, last3);
-        dspm = new DongSPModel(id, ma, ten);
-        return dspm;
-    }
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
