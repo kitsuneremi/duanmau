@@ -5,6 +5,7 @@ import javax.security.auth.callback.ConfirmationCallback;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import khungproject.DomainModels.ChiTietSPModel;
 import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.DomainModels.DongSPModel;
 import khungproject.DomainModels.MauSacModel;
@@ -61,9 +62,9 @@ public class ChiTietSpView extends javax.swing.JFrame {
         }
     }
 
-    public ChiTietSPViewModel x(String b) {
+    public ChiTietSPModel getformdata(String b) {
         try {
-            ChiTietSPViewModel spm = new ChiTietSPViewModel();
+            ChiTietSPModel ctspm = new ChiTietSPModel();
             SanPhamModel s = new SanPhamModel();
             if ("insert".equals(b)) {
                 s.setMa(rdn());
@@ -71,20 +72,20 @@ public class ChiTietSpView extends javax.swing.JFrame {
                 s.setMa(txtmasp.getText());
             }
             s.setTen(txttensp.getText());
-            spm.setSpm(s);
+            ctspm.setSpm(s);
             NSXModel nsxm = new NSXModel(ser.g(cbbnsx.getSelectedItem().toString()).get(0), ser.g(cbbnsx.getSelectedItem().toString()).get(1), ser.g(cbbnsx.getSelectedItem().toString()).get(2));
             MauSacModel msm = new MauSacModel(ser.g(cbbmau.getSelectedItem().toString()).get(0), ser.g(cbbmau.getSelectedItem().toString()).get(1), ser.g(cbbmau.getSelectedItem().toString()).get(2));
             DongSPModel dspm = new DongSPModel(ser.g(cbbdongsp.getSelectedItem().toString()).get(0), ser.g(cbbdongsp.getSelectedItem().toString()).get(1), ser.g(cbbdongsp.getSelectedItem().toString()).get(2));
 
-            spm.setIdnsx(nsxm.getId());
-            spm.setIdmausac(msm.getId());
-            spm.setIddongsp(dspm.getId());
-            spm.setNambh(Integer.parseInt(txtnambh.getText()));
-            spm.setMota(txtmota.getText());
-            spm.setSoluongsp(Integer.parseInt(txtslsp.getText()));
-            spm.setGianhap(Float.parseFloat(txtgianhap.getText()));
-            spm.setGiaban(Float.parseFloat(txtgiaban.getText()));
-            return spm;
+            ctspm.setIdnsx(nsxm.getId());
+            ctspm.setIdmausac(msm.getId());
+            ctspm.setIddongsp(dspm.getId());
+            ctspm.setNambh(Integer.parseInt(txtnambh.getText()));
+            ctspm.setMota(txtmota.getText());
+            ctspm.setSoluongsp(Integer.parseInt(txtslsp.getText()));
+            ctspm.setGianhap(Float.parseFloat(txtgianhap.getText()));
+            ctspm.setGiaban(Float.parseFloat(txtgiaban.getText()));
+            return ctspm;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -317,18 +318,19 @@ public class ChiTietSpView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtnambhActionPerformed
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
-        ChiTietSPViewModel spm = x("insert");
-        ser.themsp(spm);
+        ChiTietSPModel ctspm = getformdata("insert");
+        ser.themsp(ctspm);
         loadsp();
     }//GEN-LAST:event_btnthemActionPerformed
 
     private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
-        ChiTietSPViewModel spm = x("update");
         int row = tblsp.getSelectedRow();
         if (row == -1) {
             return;
         }
-        ser.updatesp(spm, ser.traten("idsp",tblsp.getValueAt(row, 1).toString()));
+        ChiTietSPModel ctspm = getformdata("update");
+        ctspm.getSpm().setId(ser.traten("idsp",tblsp.getValueAt(row, 1).toString()));
+        ser.updatesp(ctspm);
         loadsp();
     }//GEN-LAST:event_btnsuaActionPerformed
 

@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import khungproject.DomainModels.ChiTietSPModel;
 import khungproject.DomainModels.DongSPModel;
 import khungproject.DomainModels.MauSacModel;
 import khungproject.DomainModels.NSXModel;
@@ -50,23 +51,23 @@ public class ChiTietSPRepo {
 
     }
 
-    public boolean themsp(ChiTietSPViewModel spm) {
+    public boolean themsp(ChiTietSPModel ctspm) {
         try {
             String sql = "declare @id uniqueidentifier; set @id = newid(); insert into SanPham(Id,Ma,Ten) values (@id,?,?); insert into chitietsp(idsp,idnsx,idmausac,iddongsp,nambh,mota,soluongton,gianhap,giaban) values(@id,convert(uniqueidentifier,?),convert(uniqueidentifier,?),convert(uniqueidentifier,?),?,?,?,?,?)";
             Connection conn = DBConnection.connection();
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, rdn());
-            ps.setString(2, spm.getSpm().getTen());
+            ps.setString(2, ctspm.getSpm().getTen());
 
-            ps.setString(3, spm.getIdnsx());
-            ps.setString(4, spm.getIdmausac());
-            ps.setString(5, spm.getIddongsp());
-            ps.setInt(6, spm.getNambh());
-            ps.setString(7, spm.getMota());
-            ps.setInt(8, spm.getSoluongsp());
-            ps.setFloat(9, spm.getGianhap());
-            ps.setFloat(10, spm.getGiaban());
+            ps.setString(3, ctspm.getIdnsx());
+            ps.setString(4, ctspm.getIdmausac());
+            ps.setString(5, ctspm.getIddongsp());
+            ps.setInt(6, ctspm.getNambh());
+            ps.setString(7, ctspm.getMota());
+            ps.setInt(8, ctspm.getSoluongsp());
+            ps.setFloat(9, ctspm.getGianhap());
+            ps.setFloat(10, ctspm.getGiaban());
             ps.executeUpdate();
 
             return true;
@@ -76,27 +77,27 @@ public class ChiTietSPRepo {
         }
     }
 
-    public boolean updatesp(ChiTietSPViewModel spm, String id) {
+    public boolean updatesp(ChiTietSPModel ctspm) {
         try {
             String sql = "update Chitietsp set idnsx = convert(uniqueidentifier,?), idmausac = convert(uniqueidentifier,?), iddongsp = convert(uniqueidentifier,?),nambh = ?,mota = ?,soluongton = ?,gianhap = ?,giaban = ? where idsp = convert(uniqueidentifier,?)";
             String sql2 = "update sanpham set ten = ? where id = convert(uniqueidentifier,?)";
             Connection conn = DBConnection.connection();
 
             PreparedStatement ps1 = conn.prepareStatement(sql2);
-            ps1.setString(1, spm.getSpm().getTen());
-            ps1.setString(2, id);
+            ps1.setString(1, ctspm.getSpm().getTen());
+            ps1.setString(2, ctspm.getSpm().getId());
             ps1.executeUpdate();
 
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, spm.getIdnsx());
-            ps.setString(2, spm.getIdmausac());
-            ps.setString(3, spm.getIddongsp());
-            ps.setInt(4, spm.getNambh());
-            ps.setString(5, spm.getMota());
-            ps.setInt(6, spm.getSoluongsp());
-            ps.setFloat(7, spm.getGianhap());
-            ps.setFloat(8, spm.getGiaban());
-            ps.setString(9, id);
+            ps.setString(1, ctspm.getIdnsx());
+            ps.setString(2, ctspm.getIdmausac());
+            ps.setString(3, ctspm.getIddongsp());
+            ps.setInt(4, ctspm.getNambh());
+            ps.setString(5, ctspm.getMota());
+            ps.setInt(6, ctspm.getSoluongsp());
+            ps.setFloat(7, ctspm.getGianhap());
+            ps.setFloat(8, ctspm.getGiaban());
+            ps.setString(9,ctspm.getSpm().getId());
             ps.executeUpdate();
             return true;
         } catch (SQLException ex) {

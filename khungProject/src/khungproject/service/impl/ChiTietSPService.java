@@ -1,6 +1,7 @@
 package khungproject.service.impl;
 
 import java.util.ArrayList;
+import khungproject.DomainModels.ChiTietSPModel;
 import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.DomainModels.DongSPModel;
 import khungproject.DomainModels.MauSacModel;
@@ -16,13 +17,13 @@ public class ChiTietSPService implements khungproject.service.ChiTietSPService {
     }
 
     @Override
-    public boolean themsp(ChiTietSPViewModel spm) {
-        return repo.themsp(spm);
+    public boolean themsp(ChiTietSPModel ctspm) {
+        return repo.themsp(ctspm);
     }
 
     @Override
-    public boolean updatesp(ChiTietSPViewModel spm, String id) {
-        return repo.updatesp(spm, id);
+    public boolean updatesp(ChiTietSPModel ctspm) {
+        return repo.updatesp(ctspm);
     }
 
     @Override

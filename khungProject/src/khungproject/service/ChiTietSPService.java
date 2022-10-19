@@ -1,6 +1,7 @@
 package khungproject.service;
 
 import java.util.ArrayList;
+import khungproject.DomainModels.ChiTietSPModel;
 import khungproject.DomainModels.DongSPModel;
 import khungproject.DomainModels.MauSacModel;
 import khungproject.DomainModels.NSXModel;
@@ -14,9 +15,9 @@ public interface ChiTietSPService {
 
     public ArrayList<ChiTietSPViewModel> getlistsp();
 
-    public boolean themsp(ChiTietSPViewModel spm);
+    public boolean themsp(ChiTietSPModel ctspm);
 
-    public boolean updatesp(ChiTietSPViewModel spm, String id);
+    public boolean updatesp(ChiTietSPModel ctspm);
 
     public boolean deletesp(String id);
 

@@ -1,8 +1,6 @@
-package khungproject.ViewModel;
+package khungproject.DomainModels;
 
-import khungproject.DomainModels.SanPhamModel;
-
-public class ChiTietSPViewModel {
+public class ChiTietSPModel {
 
     private String id;
     private SanPhamModel spm;
