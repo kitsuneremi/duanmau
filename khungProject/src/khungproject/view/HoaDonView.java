@@ -11,7 +11,7 @@ import khungproject.DomainModels.HoaDonChiTietModel;
 import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.DomainModels.HoaDonModel;
 import khungproject.DomainModels.SanPhamModel;
-import khungproject.ViewModel.SanPhamViewModel;
+import khungproject.ViewModel.HoaDonViewModel;
 import khungproject.service.impl.HoaDonService;
 
 public class HoaDonView extends javax.swing.JFrame {
@@ -301,6 +301,12 @@ public class HoaDonView extends javax.swing.JFrame {
 
         jLabel8.setText("san pham");
 
+        txtnice.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtniceFocusLost(evt);
+            }
+        });
+
         jLabel10.setText("trừ slsp chưa làm :V");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -410,7 +416,7 @@ public class HoaDonView extends javax.swing.JFrame {
         //luu hoa don vao db
         HoaDonChiTietModel hdctm = new HoaDonChiTietModel();
         HoaDonModel hdm = new HoaDonModel();
-        ChiTietSPViewModel ctspm = new ChiTietSPViewModel();
+        ChiTietSPViewModel ctspvm = new ChiTietSPViewModel();
 
         hdm.setMa(mahd);
         try {
@@ -421,9 +427,9 @@ public class HoaDonView extends javax.swing.JFrame {
             ex.printStackTrace();
             return;
         }
-        ctspm.setGiaban(Float.parseFloat(String.valueOf(0)));
+        ctspvm.setGiaban(Float.parseFloat(String.valueOf(0)));
         hdctm.setSoluong(0);
-        hdctm.setSpm(ctspm);
+        hdctm.setCtspvm(ctspvm);
         ser.luuhoadon(hdctm, hdm, makh);
 
         loadhoadon();
@@ -431,9 +437,6 @@ public class HoaDonView extends javax.swing.JFrame {
     }//GEN-LAST:event_btntaohoadonActionPerformed
 
     private void btnthanhtoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthanhtoanActionPerformed
-        DefaultTableModel dx = (DefaultTableModel) tblgiohang.getModel();
-        dx.setRowCount(0);
-        
         if ("".equals(txttennv.getText())) {
             JOptionPane.showMessageDialog(this, "chua chon nhan vien");
             return;
@@ -447,25 +450,27 @@ public class HoaDonView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "sai dinh dang tien");
             return;
         }
-        
+
         DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
         int soluong = 0;
         double tongtien = 0;
-        for(int i = 0;i < dtm.getRowCount();i++){
+        for (int i = 0; i < dtm.getRowCount(); i++) {
             soluong += Integer.parseInt(tblgiohang.getValueAt(i, 3).toString());
             tongtien += Double.parseDouble(tblgiohang.getValueAt(i, 5).toString());
         }
 
-        Date d = new Date();
-        SanPhamViewModel ctspvm = new SanPhamViewModel();
-        ctspvm.setIdhd(ser.traidhoadon(txtmahoadon.getText()));
-        ctspvm.setIdsp(ser.traidsp(tblgiohang.getValueAt(0, 1).toString()));
-        ctspvm.setMasp(tblgiohang.getValueAt(0, 1).toString());
-        ctspvm.setSoluong(soluong);
-        ctspvm.setThanhtien(tongtien);
-        ser.updatehoadon(ctspvm);
+        HoaDonChiTietModel hdctm = new HoaDonChiTietModel();
+        HoaDonModel hdm = new HoaDonModel();
+        hdm.setId(ser.tra(txtmahoadon.getText(), "traidhoadon"));
+        hdm.setDongia(tongtien);
+        hdctm.setSoluong(soluong);
+        hdctm.setHdm(hdm);
+
+        ser.updatehoadon(hdctm, ser.tra(tblgiohang.getValueAt(0, 1).toString(), "traidsp"));
         loadhoadon();
         loadsp();
+        DefaultTableModel dx = (DefaultTableModel) tblgiohang.getModel();
+        dx.setRowCount(0);
     }//GEN-LAST:event_btnthanhtoanActionPerformed
 
     private void loadhoadon() {
@@ -495,6 +500,49 @@ public class HoaDonView extends javax.swing.JFrame {
     }
 
     private void tblsanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblsanphamMouseClicked
+        int row = tblsanpham.getSelectedRow();
+
+        if (tblgiohang.getRowCount() != 0) {
+            for (int i = 0; i < tblgiohang.getRowCount(); i++) {
+                if (tblsanpham.getValueAt(row, 1).equals(tblgiohang.getValueAt(i, 1))) {
+                    if (tblgiohang.getValueAt(i, 3).equals(tblsanpham.getValueAt(row, 5))) {
+                        JOptionPane.showMessageDialog(this, "số lượng vượt quá");
+                        return;
+                    }
+                    tblgiohang.setValueAt((Integer.parseInt(tblgiohang.getValueAt(i, 3).toString()) + 1), i, 3);
+                    tblgiohang.setValueAt((Integer.parseInt(tblgiohang.getValueAt(i, 3).toString()) * Float.parseFloat(tblgiohang.getValueAt(i, 4).toString())), i, 5);
+
+                    return;
+                }
+            }
+        }
+
+        ChiTietSPViewModel ctspvm = new ChiTietSPViewModel();
+        SanPhamModel spm = new SanPhamModel();
+
+        //set sanphammodel
+        spm.setMa(tblsanpham.getValueAt(row, 1).toString());
+        spm.setTen(tblsanpham.getValueAt(row, 2).toString());
+
+        ctspvm.setGiaban(Float.parseFloat(tblsanpham.getValueAt(row, 7).toString()));
+        ctspvm.setSpm(spm);
+
+        ArrayList<HoaDonViewModel> list = new ArrayList<>();
+        HoaDonViewModel hdvm = new HoaDonViewModel("", ser.tra(tblsanpham.getValueAt(row, 1).toString(), "traidsp"), tblsanpham.getValueAt(row, 1).toString(), tblsanpham.getValueAt(row, 2).toString(), 1, Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()), Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()));
+        list.add(hdvm);
+
+        DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
+        for (int i = 0; i < list.size(); i++) {
+            Object[] rowData = {
+                dtm.getRowCount() + 1,
+                list.get(i).getMasp(),
+                list.get(i).getTensp(),
+                list.get(i).getSoluong(),
+                list.get(i).getDongia(),
+                list.get(i).getDongia()
+            };
+            dtm.addRow(rowData);
+        }
 
     }//GEN-LAST:event_tblsanphamMouseClicked
 
@@ -562,10 +610,10 @@ public class HoaDonView extends javax.swing.JFrame {
         int month = cld.get(Calendar.MONTH);
         int year = cld.get(Calendar.YEAR);
 
-        ArrayList<SanPhamViewModel> list = new ArrayList<>();
-        SanPhamViewModel ctspvm = new SanPhamViewModel("",ser.traidsp(tblsanpham.getValueAt(row, 1).toString()),tblsanpham.getValueAt(row, 1).toString(), tblsanpham.getValueAt(row, 2).toString(), 1, Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()), Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()));
+        ArrayList<HoaDonViewModel> list = new ArrayList<>();
+        HoaDonViewModel ctspvm = new HoaDonViewModel("", ser.tra(tblsanpham.getValueAt(row, 1).toString(), "traidsp"), tblsanpham.getValueAt(row, 1).toString(), tblsanpham.getValueAt(row, 2).toString(), 1, Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()), Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()));
         list.add(ctspvm);
-        
+
         DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
         Object[] rowData = {
             dtm.getRowCount() + 1,
@@ -585,11 +633,23 @@ public class HoaDonView extends javax.swing.JFrame {
 
     private void cbbmanhanvienFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbbmanhanvienFocusLost
         try {
-            txttennv.setText(ser.tratennhanvien(cbbmanhanvien.getSelectedItem().toString()));
+            txttennv.setText(ser.tra(cbbmanhanvien.getSelectedItem().toString(), "tratennhanvien"));
         } catch (NullPointerException ex) {
             txttennv.setText("");
         }
     }//GEN-LAST:event_cbbmanhanvienFocusLost
+
+    private void txtniceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtniceFocusLost
+        ArrayList<ChiTietSPViewModel> list = new ArrayList<>();
+        for (int a = 0; a < tblsanpham.getRowCount(); a++) {
+            ChiTietSPViewModel ctspvm = new ChiTietSPViewModel();
+            SanPhamModel spm = new SanPhamModel();
+            spm.setId(tblsanpham.getValueAt(a, 0).toString());
+            spm.setMa(tblsanpham.getValueAt(a, 1).toString());
+            spm.setTen(tblsanpham.getValueAt(a, 2).toString());
+
+        }
+    }//GEN-LAST:event_txtniceFocusLost
 
     private void loadsp() {
         DefaultTableModel dtm = (DefaultTableModel) tblsanpham.getModel();

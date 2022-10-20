@@ -3,8 +3,6 @@ package khungproject.Repository;
 import khungproject.ViewModel.ChiTietSPViewModel;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import khungproject.DomainModels.ChiTietSPModel;
 import khungproject.DomainModels.DongSPModel;
 import khungproject.DomainModels.MauSacModel;
@@ -44,7 +42,6 @@ public class ChiTietSPRepo {
             }
             return list;
         } catch (SQLException ex) {
-            System.out.println("loi o load");
             ex.printStackTrace();
             return null;
         }
@@ -133,26 +130,14 @@ public class ChiTietSPRepo {
     public String traten(String loai, String id) {
         try {
             String sql = "";
-            switch (loai) {
-                case "nsx":
-                    sql = "select ten from nsx where id = convert(uniqueidentifier,?)";
-                    break;
-                case "mausac":
-                    sql = "select ten from mausac where id = convert(uniqueidentifier,?)";
-                    break;
-                case "dongsp":
-                    sql = "select ten from dongsp where id = convert(uniqueidentifier,?)";
-                    break;
-                case "idsp":
-                    sql = "select id from sanpham where ten = ?";
-                    break;
-                case "idctsp":
-                    sql = "select id from chitietsp where idsp = convert(uniqueidentifier,?)";
-                    break;
-                default:
-                    sql = "select ten from dongsp where id = convert(uniqueidentifier,?)";
-                    break;
-            }
+            sql = switch (loai) {
+                case "nsx" -> "select ten from nsx where id = convert(uniqueidentifier,?)";
+                case "mausac" -> "select ten from mausac where id = convert(uniqueidentifier,?)";
+                case "dongsp" -> "select ten from dongsp where id = convert(uniqueidentifier,?)";
+                case "idsp" -> "select id from sanpham where ten = ?";
+                case "idctsp" -> "select id from chitietsp where idsp = convert(uniqueidentifier,?)";
+                default -> "select ten from dongsp where id = convert(uniqueidentifier,?)";
+            };
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, id);
@@ -261,7 +246,6 @@ public class ChiTietSPRepo {
     public boolean deleteall(String idsp, String idctsp) {
         try {
             String s = "";
-
             String s1 = "select idhoadon from hoadonchitiet where idchitietsp = convert(uniqueidentifier,?)";
             String s2 = "delete from hoadonchitiet where idchitietsp = convert(uniqueidentifier,?); delete from hoadon where id = convert(uniqueidentifier,?);delete from chitietsp where id = convert(uniqueidentifier,?);delete from sanpham where id = convert(uniqueidentifier,?)";
             Connection conn = DBConnection.connection();
@@ -306,7 +290,7 @@ public class ChiTietSPRepo {
         id = y.substring(a, b);
 
         int c = b + 12;
-        for (int i = b + 5; i < 78; i++) {
+        for (int i = b + 5; i < y.length(); i++) {
             if (y.substring(i, i + 1).equals(",")) {
                 c = i;
                 break;

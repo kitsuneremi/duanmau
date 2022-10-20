@@ -7,7 +7,6 @@ import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.DomainModels.HoaDonChiTietModel;
 import khungproject.DomainModels.HoaDonModel;
 import khungproject.DomainModels.SanPhamModel;
-import khungproject.ViewModel.SanPhamViewModel;
 
 public class HoaDonRepo {
 
@@ -46,57 +45,6 @@ public class HoaDonRepo {
             return null;
         }
 
-    }
-
-    public String tratensp(String id) {
-        try {
-            String sql = "select ten from sanpham where id = convert(uniqueidentifier,?)";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, id);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public String traidctsp(String idsp) {
-        try {
-            String sql = "select id from chitietsp where idsp = ?";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, idsp);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public String traidsp(String ma) {
-        try {
-            String sql = "select id from sanpham where ma = ?";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, ma);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
     }
 
     public boolean luuhoadon(HoaDonChiTietModel hdctm, HoaDonModel hdm, String makh) {
@@ -149,7 +97,7 @@ public class HoaDonRepo {
         }
     }
 
-    public boolean updatehoadon(SanPhamViewModel ctspvm) {
+    public boolean updatehoadon(HoaDonChiTietModel hdctm, String idsp) {
         try {
             String s1 = "select id from chitietsp where idsp = convert(uniqueidentifier,?)";
             String s2 = "update hoadon set tinhtrang = 1,ngaythanhtoan = ? where id = convert(uniqueidentifier,?)";
@@ -157,7 +105,7 @@ public class HoaDonRepo {
             Connection conn = DBConnection.connection();
             PreparedStatement ps = conn.prepareStatement(s1);
             String b = "";
-            ps.setString(1, ctspvm.getIdsp());
+            ps.setString(1, idsp);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 b = rs.getString(1);
@@ -167,38 +115,19 @@ public class HoaDonRepo {
             ps = conn.prepareStatement(s2);
             Date d = new Date();
             ps.setDate(1, new java.sql.Date(d.getTime()));
-            ps.setString(2, ctspvm.getIdhd());
+            ps.setString(2, hdctm.getHdm().getId());
             ps.executeUpdate();
             ps.close();
 
-            
-            
             ps = conn.prepareStatement(s3);
-            ps.setString(1, ctspvm.getIdhd());
+            ps.setString(1, hdctm.getHdm().getId());
             ps.setString(2, b);
-            ps.setInt(3, ctspvm.getSoluong());
-            ps.setDouble(4, ctspvm.getDongia());
+            ps.setInt(3, hdctm.getSoluong());
+            ps.setDouble(4, hdctm.getHdm().getDongia());
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
-        }
-    }
-
-    public String tramanhanvien(String idnv) {
-        try {
-            String sql = "select ma from nhanvien where id = convert(uniqueidentifier,?)";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, idnv);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
         }
     }
 
@@ -218,40 +147,6 @@ public class HoaDonRepo {
             return null;
         }
     }
-    
-    public String traidhoadon(String ma){
-        try {
-            String sql = "select id from hoadon where ma = ?";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, ma);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public String tratennhanvien(String ma) {
-        try {
-            String sql = "select ten from NhanVien where ma = ?";
-            Connection conn = DBConnection.connection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, ma);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getString(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
 
     public boolean updateslsp(String ma) {
         try {
@@ -264,6 +159,36 @@ public class HoaDonRepo {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
+        }
+    }
+
+    public String tra(String x, String y) {
+        try {
+            String sql = "";
+            if (y.equals("tratensp")) {
+                sql = "select ten from sanpham where id = convert(uniqueidentifier,?)";
+            } else if (y.equals("traidctsp")) {
+                sql = "select id from chitietsp where idsp = ?";
+            } else if (y.equals("traidsp")) {
+                sql = "select id from sanpham where ma = ?";
+            } else if (y.equals("tratennhanvien")) {
+                sql = "select ten from NhanVien where ma = ?";
+            } else if (y.equals("traidhoadon")) {
+                sql = "select id from hoadon where ma = ?";
+            } else if (y.equals("tramanhanvien")) {
+                sql = "select ma from nhanvien where id = convert(uniqueidentifier,?)";
+            }
+            Connection conn = DBConnection.connection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, x);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getString(1);
+            }
+            return null;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
         }
     }
 }

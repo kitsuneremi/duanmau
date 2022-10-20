@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import khungproject.DomainModels.KhachHangModel;
 
-public class DkyRepo {
+public class DangKyRepo {
     public boolean dangky(KhachHangModel khm){
         try {
             String sql = "insert into khachhang(id,ma,ten,tendem,ho,ngaysinh,sdt,diachi,thanhpho,quocgia,matkhau) values(newid(),?,?,?,?,?,?,?,?,?,?)";

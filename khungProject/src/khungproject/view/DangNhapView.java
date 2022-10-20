@@ -127,7 +127,7 @@ public class DangNhapView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        dkyView dky = new dkyView();
+        DangKyView dky = new DangKyView();
         dky.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed

@@ -1,11 +1,11 @@
 package khungproject.service;
 
 import khungproject.DomainModels.KhachHangModel;
-import khungproject.Repository.DkyRepo;
+import khungproject.Repository.DangKyRepo;
 
-public interface DKyService {
+public interface DangKyService {
 
-    public DkyRepo repo = new DkyRepo();
+    public DangKyRepo repo = new DangKyRepo();
 
     public boolean dangky(KhachHangModel khm);
 }

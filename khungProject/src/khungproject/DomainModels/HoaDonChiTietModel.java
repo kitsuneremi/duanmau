@@ -3,9 +3,20 @@ package khungproject.DomainModels;
 import khungproject.ViewModel.ChiTietSPViewModel;
 
 public class HoaDonChiTietModel {
+
     String idhoadon;
+    String idctsp;
     int soluong;
-    ChiTietSPViewModel spm;
+    ChiTietSPViewModel ctspvm;
+    HoaDonModel hdm;
+
+    public String getIdctsp() {
+        return idctsp;
+    }
+
+    public void setIdctsp(String idctsp) {
+        this.idctsp = idctsp;
+    }
 
     public String getIdhoadon() {
         return idhoadon;
@@ -23,13 +34,20 @@ public class HoaDonChiTietModel {
         this.soluong = soluong;
     }
 
-    public ChiTietSPViewModel getSpm() {
-        return spm;
+    public ChiTietSPViewModel getCtspvm() {
+        return ctspvm;
     }
 
-    public void setSpm(ChiTietSPViewModel spm) {
-        this.spm = spm;
+    public void setCtspvm(ChiTietSPViewModel ctspvm) {
+        this.ctspvm = ctspvm;
     }
 
-   
+    public HoaDonModel getHdm() {
+        return hdm;
+    }
+
+    public void setHdm(HoaDonModel hdm) {
+        this.hdm = hdm;
+    }
+
 }

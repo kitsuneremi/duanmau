@@ -1,33 +1,16 @@
 package khungproject.service.impl;
 
-
 import java.util.ArrayList;
 import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.DomainModels.HoaDonChiTietModel;
 import khungproject.DomainModels.HoaDonModel;
-import khungproject.ViewModel.SanPhamViewModel;
+import khungproject.ViewModel.HoaDonViewModel;
 
-public class HoaDonService implements khungproject.service.HoaDonService{
-
+public class HoaDonService implements khungproject.service.HoaDonService {
 
     @Override
     public ArrayList<ChiTietSPViewModel> getlistsp() {
         return repo.getlistsp();
-    }
-
-    @Override
-    public String tratensp(String id) {
-        return repo.tratensp(id);
-    }
-
-    @Override
-    public String traidctsp(String idsp) {
-        return repo.traidctsp(idsp);
-    }
-
-    @Override
-    public String traidsp(String ma) {
-        return repo.traidsp(ma);
     }
 
     @Override
@@ -41,13 +24,8 @@ public class HoaDonService implements khungproject.service.HoaDonService{
     }
 
     @Override
-    public boolean updatehoadon(SanPhamViewModel ctspvm){
-        return repo.updatehoadon(ctspvm);
-    }
-
-    @Override
-    public String tramanhanvien(String idnv) {
-        return repo.tramanhanvien(idnv);
+    public boolean updatehoadon(HoaDonChiTietModel hdctm, String idsp) {
+        return repo.updatehoadon(hdctm,idsp);
     }
 
     @Override
@@ -56,12 +34,7 @@ public class HoaDonService implements khungproject.service.HoaDonService{
     }
 
     @Override
-    public String tratennhanvien(String ma) {
-        return repo.tratennhanvien(ma);
-    }
-    
-    @Override
-    public String traidhoadon(String ma){
-        return repo.traidhoadon(ma);
+    public String tra(String x, String y) {
+        return repo.tra(x, y);
     }
 }

@@ -1,15 +1,15 @@
 package khungproject.ViewModel;
 
-public class SanPhamViewModel {
+public class HoaDonViewModel {
 
     public String idsp, idhd, masp, tensp;
     int soluong;
     double dongia, thanhtien;
 
-    public SanPhamViewModel() {
+    public HoaDonViewModel() {
     }
 
-    public SanPhamViewModel(String idsp, String idhd, String masp, String tensp, int soluong, double dongia, double thanhtien) {
+    public HoaDonViewModel(String idsp, String idhd, String masp, String tensp, int soluong, double dongia, double thanhtien) {
         this.idsp = idsp;
         this.idhd = idhd;
         this.masp = masp;

@@ -1,4 +1,3 @@
-
 package khungproject.view;
 
 import java.util.ArrayList;
@@ -10,18 +9,16 @@ import khungproject.DomainModels.SanPhamModel;
 import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.service.impl.ChiTietSPService;
 
+public class de_thi_thu extends javax.swing.JFrame {
 
-
-
-public class test extends javax.swing.JFrame {
-    public test() {
+    public de_thi_thu() {
         initComponents();
         loadsp();
         setcbb();
     }
     private ChiTietSPService ser = new ChiTietSPService();
-    
-    private ArrayList<ChiTietSPViewModel> loadsp(){
+
+    private ArrayList<ChiTietSPViewModel> loadsp() {
         ArrayList<ChiTietSPViewModel> list = new ArrayList();
         list = ser.getlistsp();
         DefaultTableModel dtm = (DefaultTableModel) tblsp.getModel();
@@ -221,31 +218,31 @@ public class test extends javax.swing.JFrame {
 
     private void btninsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btninsertActionPerformed
         ChiTietSPModel ctspm = new ChiTietSPModel();
-        try{
+        try {
             ctspm.setNambh(Integer.parseInt(txtnambh.getText()));
-        }catch(Exception ex){
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "sai dinh dang nambh");
-            return ;
+            return;
         }
-        try{
+        try {
             ctspm.setGianhap(Float.parseFloat(txtgianhap.getText()));
-        }catch(Exception ex){
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "sai dinh dang gia nhap");
-            return ;
+            return;
         }
-        try{
+        try {
             ctspm.setSoluongsp(Integer.parseInt(txtslton.getText()));
-        }catch(Exception ex){
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "sai dinh dang slsp");
-            return ;
+            return;
         }
-        
+
         ctspm.setMota(txtmota.getText());
         ctspm.setGiaban(Float.parseFloat(String.valueOf(0)));
         ctspm.setIddongsp("572CF416-32C6-4B6A-BF5B-66745EC76E09");
         ctspm.setIdmausac("B9A5E41A-183F-4535-BB0C-A0FC8D501740");
         ctspm.setIdnsx("76208129-3A15-46D1-A779-5FE4BD0F2FC5");
-        
+
         SanPhamModel spm = new SanPhamModel();
         spm.setMa(rdn());
         spm.setTen(rdn());
@@ -256,15 +253,15 @@ public class test extends javax.swing.JFrame {
 
     private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
         int row = tblsp.getSelectedRow();
-        if(row == -1){
+        if (row == -1) {
             JOptionPane.showMessageDialog(this, "chua chon hang nao");
-            return ;
+            return;
         }
         ChiTietSPModel ctspm = new ChiTietSPModel();
         SanPhamModel spm = new SanPhamModel();
         spm.setId(tblsp.getValueAt(row, 0).toString());
         spm.setTen(rdn());
-        
+
         ctspm.setNambh(Integer.parseInt(txtnambh.getText()));
         ctspm.setMota(txtmota.getText());
         ctspm.setGianhap(Float.parseFloat(txtgianhap.getText()));
@@ -282,8 +279,8 @@ public class test extends javax.swing.JFrame {
         ArrayList<ChiTietSPViewModel> list = loadsp();
         ArrayList<ChiTietSPViewModel> list_final = new ArrayList<>();
         int nam = Integer.parseInt(cbbsearch.getSelectedItem().toString());
-        for(int i = 0;i < list.size();i++){
-            if(nam == list.get(i).getNambh()){
+        for (int i = 0; i < list.size(); i++) {
+            if (nam == list.get(i).getNambh()) {
                 list_final.add(list.get(i));
             }
         }
@@ -310,7 +307,6 @@ public class test extends javax.swing.JFrame {
         txtslton.setText(tblsp.getValueAt(row, 3).toString());
     }//GEN-LAST:event_tblspMouseClicked
 
-    
     private static String rdn() {
         StringBuilder sb = new StringBuilder();
         String b = "0123456789" + "abcdefghijklmnopqrstuvxyz";
@@ -320,15 +316,15 @@ public class test extends javax.swing.JFrame {
         }
         return sb.toString();
     }
-    
-    public void setcbb(){
+
+    public void setcbb() {
         DefaultComboBoxModel dcm = (DefaultComboBoxModel) cbbsearch.getModel();
         dcm.removeAllElements();
-        for(int i = 1990; i <= 2000;i++){
+        for (int i = 1990; i <= 2000; i++) {
             dcm.addElement(i);
         }
     }
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -343,20 +339,21 @@ public class test extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(test.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(de_thi_thu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(test.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(de_thi_thu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(test.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(de_thi_thu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(test.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(de_thi_thu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new test().setVisible(true);
+                new de_thi_thu().setVisible(true);
             }
         });
     }
