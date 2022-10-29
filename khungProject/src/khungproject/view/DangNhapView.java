@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import khungproject.DomainModels.DangNhapModel;
 import khungproject.Repository.NhanVienRepo;
+import khungproject.service.impl.NhanVienService;
 
 public class DangNhapView extends javax.swing.JFrame {
 
-    private NhanVienRepo repo = new NhanVienRepo();
+    private NhanVienService ser = new NhanVienService();
 
     public DangNhapView() {
         initComponents();
@@ -135,9 +136,9 @@ public class DangNhapView extends javax.swing.JFrame {
     public void dangnhap() {
         ArrayList<DangNhapModel> list = new ArrayList<>();
         if (rdonhanvien.isSelected()) {
-            list = repo.dangnhapnhanvien();
+            list = ser.dangnhapnhanvien();
         } else {
-            list = repo.dangnhapkhachhang();
+            list = ser.dangnhapkhachhang();
         }
         int i = 0;
         for (DangNhapModel x : list) {

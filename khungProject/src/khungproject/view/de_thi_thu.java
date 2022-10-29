@@ -1,10 +1,14 @@
 package khungproject.view;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import khungproject.DomainModels.ChiTietSPModel;
+import khungproject.DomainModels.DongSPModel;
+import khungproject.DomainModels.MauSacModel;
+import khungproject.DomainModels.NSXModel;
 import khungproject.DomainModels.SanPhamModel;
 import khungproject.ViewModel.ChiTietSPViewModel;
 import khungproject.service.impl.ChiTietSPService;
@@ -64,6 +68,7 @@ public class de_thi_thu extends javax.swing.JFrame {
         btnupdate = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblsp = new javax.swing.JTable();
+        btndelete = new javax.swing.JButton();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -136,6 +141,13 @@ public class de_thi_thu extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblsp);
 
+        btndelete.setText("delete");
+        btndelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,7 +162,7 @@ public class de_thi_thu extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addGap(18, 18, 18)
@@ -158,10 +170,11 @@ public class de_thi_thu extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel3)
                                         .addGap(18, 18, 18)
-                                        .addComponent(txtnambh, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtnambh, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(btninsert)
                                             .addComponent(txtgianhap))))
@@ -178,8 +191,10 @@ public class de_thi_thu extends javax.swing.JFrame {
                                             .addComponent(btnsearch)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(41, 41, 41)
-                                        .addComponent(btnupdate)))))))
-                .addContainerGap(55, Short.MAX_VALUE))
+                                        .addComponent(btnupdate)
+                                        .addGap(50, 50, 50)
+                                        .addComponent(btndelete)))))))
+                .addGap(55, 55, 55))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,7 +222,8 @@ public class de_thi_thu extends javax.swing.JFrame {
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btninsert)
-                    .addComponent(btnupdate))
+                    .addComponent(btnupdate)
+                    .addComponent(btndelete))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -239,9 +255,9 @@ public class de_thi_thu extends javax.swing.JFrame {
 
         ctspm.setMota(txtmota.getText());
         ctspm.setGiaban(Float.parseFloat(String.valueOf(0)));
-        ctspm.setIddongsp("572CF416-32C6-4B6A-BF5B-66745EC76E09");
-        ctspm.setIdmausac("B9A5E41A-183F-4535-BB0C-A0FC8D501740");
-        ctspm.setIdnsx("76208129-3A15-46D1-A779-5FE4BD0F2FC5");
+        ctspm.setDongsp(new DongSPModel("572CF416-32C6-4B6A-BF5B-66745EC76E09", "", ""));
+        ctspm.setMausac(new MauSacModel("B9A5E41A-183F-4535-BB0C-A0FC8D501740", "", ""));
+        ctspm.setNsx(new NSXModel("76208129-3A15-46D1-A779-5FE4BD0F2FC5", "", ""));
 
         SanPhamModel spm = new SanPhamModel();
         spm.setMa(rdn());
@@ -262,14 +278,30 @@ public class de_thi_thu extends javax.swing.JFrame {
         spm.setId(tblsp.getValueAt(row, 0).toString());
         spm.setTen(rdn());
 
-        ctspm.setNambh(Integer.parseInt(txtnambh.getText()));
+        try {
+            ctspm.setNambh(Integer.parseInt(txtnambh.getText()));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "nhieu so the");
+            return;
+        }
+
         ctspm.setMota(txtmota.getText());
+        if (txtgianhap.getText().length() > 12) {
+            JOptionPane.showMessageDialog(this, "nhieu so the");
+            return;
+        }
+
         ctspm.setGianhap(Float.parseFloat(txtgianhap.getText()));
         ctspm.setGiaban(Float.parseFloat(String.valueOf(0)));
-        ctspm.setIddongsp("572CF416-32C6-4B6A-BF5B-66745EC76E09");
-        ctspm.setIdmausac("B9A5E41A-183F-4535-BB0C-A0FC8D501740");
-        ctspm.setIdnsx("76208129-3A15-46D1-A779-5FE4BD0F2FC5");
-        ctspm.setSoluongsp(Integer.parseInt(txtslton.getText()));
+        ctspm.setDongsp(new DongSPModel("572CF416-32C6-4B6A-BF5B-66745EC76E09", "", ""));
+        ctspm.setMausac(new MauSacModel("B9A5E41A-183F-4535-BB0C-A0FC8D501740", "", ""));
+        ctspm.setNsx(new NSXModel("76208129-3A15-46D1-A779-5FE4BD0F2FC5", "", ""));
+        try {
+            ctspm.setSoluongsp(Integer.parseInt(txtslton.getText()));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "nhieu so the");
+            return;
+        }
         ctspm.setSpm(spm);
         ser.updatesp(ctspm);
         loadsp();
@@ -306,6 +338,30 @@ public class de_thi_thu extends javax.swing.JFrame {
         txtgianhap.setText(tblsp.getValueAt(row, 4).toString());
         txtslton.setText(tblsp.getValueAt(row, 3).toString());
     }//GEN-LAST:event_tblspMouseClicked
+
+    private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
+        int row = tblsp.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "bạn chưa chọn hàng nào");
+            return;
+        }
+        String idsp = tblsp.getValueAt(row, 0).toString();
+        try {
+            ser.deletesp(idsp);
+            loadsp();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            int slt = JOptionPane.showConfirmDialog(this, "Error", "ban co muon xoa hoa don ko", JOptionPane.YES_NO_OPTION);
+            if (slt == JOptionPane.YES_OPTION) {
+                ser.deleteall(idsp, ser.traten(idsp, "idctsp"));
+                loadsp();
+            } else {
+                JOptionPane.showMessageDialog(this, "cancel");
+                return;
+            }
+        }
+
+    }//GEN-LAST:event_btndeleteActionPerformed
 
     private static String rdn() {
         StringBuilder sb = new StringBuilder();
@@ -359,6 +415,7 @@ public class de_thi_thu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btndelete;
     private javax.swing.JButton btninsert;
     private javax.swing.JButton btnsearch;
     private javax.swing.JButton btnupdate;

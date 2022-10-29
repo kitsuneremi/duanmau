@@ -17,7 +17,7 @@ import khungproject.service.impl.HoaDonService;
 public class HoaDonView extends javax.swing.JFrame {
 
     private HoaDonService ser = new HoaDonService();
-    String makh;
+    String makh = "makhachhang01";
 
     public HoaDonView() {
         initComponents();
@@ -74,8 +74,8 @@ public class HoaDonView extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblsanpham = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
-        txtnice = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
+        txtsearch = new javax.swing.JTextField();
+        txtstatus = new javax.swing.JLabel();
         btnthem = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -301,13 +301,13 @@ public class HoaDonView extends javax.swing.JFrame {
 
         jLabel8.setText("san pham");
 
-        txtnice.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtsearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                txtniceFocusLost(evt);
+                txtsearchFocusLost(evt);
             }
         });
 
-        jLabel10.setText("trừ slsp chưa làm :V");
+        txtstatus.setText("trừ slsp chưa làm :V");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -321,9 +321,9 @@ public class HoaDonView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtnice, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtsearch, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(68, 68, 68)
-                .addComponent(jLabel10)
+                .addComponent(txtstatus)
                 .addGap(327, 327, 327))
         );
         jPanel3Layout.setVerticalGroup(
@@ -337,8 +337,8 @@ public class HoaDonView extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(txtnice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtstatus)
+                            .addComponent(txtsearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
@@ -501,17 +501,27 @@ public class HoaDonView extends javax.swing.JFrame {
 
     private void tblsanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblsanphamMouseClicked
         int row = tblsanpham.getSelectedRow();
-
+        DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
+        int sl = 0;
+        try {
+            sl = Integer.parseInt(JOptionPane.showInputDialog(this, "nhập số lượng muốn chọn"));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "sai dinh dang so luong");
+            return;
+        }
+        if (sl > Integer.parseInt(tblsanpham.getValueAt(row, 5).toString())) {
+            JOptionPane.showMessageDialog(this, "số lượng vượt quá");
+            return;
+        }
         if (tblgiohang.getRowCount() != 0) {
             for (int i = 0; i < tblgiohang.getRowCount(); i++) {
                 if (tblsanpham.getValueAt(row, 1).equals(tblgiohang.getValueAt(i, 1))) {
-                    if (tblgiohang.getValueAt(i, 3).equals(tblsanpham.getValueAt(row, 5))) {
+                    if (Integer.parseInt(tblgiohang.getValueAt(i, 3).toString()) + sl > Integer.parseInt(tblsanpham.getValueAt(row, 5).toString())) {
                         JOptionPane.showMessageDialog(this, "số lượng vượt quá");
                         return;
                     }
-                    tblgiohang.setValueAt((Integer.parseInt(tblgiohang.getValueAt(i, 3).toString()) + 1), i, 3);
+                    tblgiohang.setValueAt((Integer.parseInt(tblgiohang.getValueAt(i, 3).toString()) + sl), i, 3);
                     tblgiohang.setValueAt((Integer.parseInt(tblgiohang.getValueAt(i, 3).toString()) * Float.parseFloat(tblgiohang.getValueAt(i, 4).toString())), i, 5);
-
                     return;
                 }
             }
@@ -528,20 +538,20 @@ public class HoaDonView extends javax.swing.JFrame {
         ctspvm.setSpm(spm);
 
         ArrayList<HoaDonViewModel> list = new ArrayList<>();
-        HoaDonViewModel hdvm = new HoaDonViewModel("", ser.tra(tblsanpham.getValueAt(row, 1).toString(), "traidsp"), tblsanpham.getValueAt(row, 1).toString(), tblsanpham.getValueAt(row, 2).toString(), 1, Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()), Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()));
+        HoaDonViewModel hdvm = new HoaDonViewModel("", ser.tra(tblsanpham.getValueAt(row, 1).toString(), "traidsp"), tblsanpham.getValueAt(row, 1).toString(), tblsanpham.getValueAt(row, 2).toString(), sl, Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()), Double.parseDouble(tblsanpham.getValueAt(row, 7).toString()));
         list.add(hdvm);
 
-        DefaultTableModel dtm = (DefaultTableModel) tblgiohang.getModel();
+        DefaultTableModel dtm1 = (DefaultTableModel) tblgiohang.getModel();
         for (int i = 0; i < list.size(); i++) {
             Object[] rowData = {
-                dtm.getRowCount() + 1,
+                dtm1.getRowCount() + 1,
                 list.get(i).getMasp(),
                 list.get(i).getTensp(),
                 list.get(i).getSoluong(),
                 list.get(i).getDongia(),
                 list.get(i).getDongia()
             };
-            dtm.addRow(rowData);
+            dtm1.addRow(rowData);
         }
 
     }//GEN-LAST:event_tblsanphamMouseClicked
@@ -578,7 +588,7 @@ public class HoaDonView extends javax.swing.JFrame {
             return;
         }
 
-        txtnice.setText(tblsanpham.getValueAt(row, col).toString());
+        txtsearch.setText(tblsanpham.getValueAt(row, col).toString());
         if (tblgiohang.getRowCount() != 0) {
             for (int i = 0; i < tblgiohang.getRowCount(); i++) {
                 if (tblsanpham.getValueAt(row, 1).equals(tblgiohang.getValueAt(i, 1))) {
@@ -639,17 +649,48 @@ public class HoaDonView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbbmanhanvienFocusLost
 
-    private void txtniceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtniceFocusLost
+    private void txtsearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtsearchFocusLost
+        String maspforsearch = txtsearch.getText();
+        if (maspforsearch.equalsIgnoreCase("")) {
+            loadsp();
+            return;
+        };
         ArrayList<ChiTietSPViewModel> list = new ArrayList<>();
         for (int a = 0; a < tblsanpham.getRowCount(); a++) {
             ChiTietSPViewModel ctspvm = new ChiTietSPViewModel();
             SanPhamModel spm = new SanPhamModel();
-            spm.setId(tblsanpham.getValueAt(a, 0).toString());
+
             spm.setMa(tblsanpham.getValueAt(a, 1).toString());
             spm.setTen(tblsanpham.getValueAt(a, 2).toString());
-
+            ctspvm.setNambh(Integer.parseInt(tblsanpham.getValueAt(a, 3).toString()));
+            ctspvm.setMota(tblsanpham.getValueAt(a, 4).toString());
+            ctspvm.setSoluongsp(Integer.parseInt(tblsanpham.getValueAt(a, 5).toString()));
+            ctspvm.setGianhap(Float.parseFloat(tblsanpham.getValueAt(a, 6).toString()));
+            ctspvm.setGiaban(Float.parseFloat(tblsanpham.getValueAt(a, 7).toString()));
+            ctspvm.setSpm(spm);
+            list.add(ctspvm);
         }
-    }//GEN-LAST:event_txtniceFocusLost
+        DefaultTableModel dtm = (DefaultTableModel) tblsanpham.getModel();
+        dtm.setRowCount(0);
+        int count = 0;
+        for (ChiTietSPViewModel x : list) {
+            if (x.getSpm().getMa().equalsIgnoreCase(maspforsearch)) {
+                count++;
+                Object[] rowData = {
+                    dtm.getRowCount() + 1,
+                    x.getSpm().getMa(),
+                    x.getSpm().getTen(),
+                    x.getNambh(),
+                    x.getMota(),
+                    x.getSoluongsp(),
+                    x.getGianhap(),
+                    x.getGiaban()
+                };
+                dtm.addRow(rowData);
+            }
+        }
+        txtstatus.setText("tìm thấy " + count + " sản phẩm");
+    }//GEN-LAST:event_txtsearchFocusLost
 
     private void loadsp() {
         DefaultTableModel dtm = (DefaultTableModel) tblsanpham.getModel();
@@ -722,7 +763,6 @@ public class HoaDonView extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbbmanhanvien;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -742,7 +782,8 @@ public class HoaDonView extends javax.swing.JFrame {
     private javax.swing.JTable tblsanpham;
     private javax.swing.JTextField txtmahoadon;
     private javax.swing.JTextField txtngaytao;
-    private javax.swing.JTextField txtnice;
+    private javax.swing.JTextField txtsearch;
+    private javax.swing.JLabel txtstatus;
     private javax.swing.JTextField txttennv;
     private javax.swing.JTextField txttienkhachdua;
     private javax.swing.JTextField txttienthua;

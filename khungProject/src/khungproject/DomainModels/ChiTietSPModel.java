@@ -4,9 +4,9 @@ public class ChiTietSPModel {
 
     private String id;
     private SanPhamModel spm;
-    private String idnsx;
-    private String idmausac;
-    private String iddongsp;
+    private NSXModel nsx;
+    private MauSacModel mausac;
+    private DongSPModel dongsp;
     private int nambh;
     private String mota;
     private int soluongsp;
@@ -29,29 +29,31 @@ public class ChiTietSPModel {
         this.spm = spm;
     }
 
-    public String getIdnsx() {
-        return idnsx;
+    public NSXModel getNsx() {
+        return nsx;
     }
 
-    public void setIdnsx(String idnsx) {
-        this.idnsx = idnsx;
+    public void setNsx(NSXModel nsx) {
+        this.nsx = nsx;
     }
 
-    public String getIdmausac() {
-        return idmausac;
+    public MauSacModel getMausac() {
+        return mausac;
     }
 
-    public void setIdmausac(String idmausac) {
-        this.idmausac = idmausac;
+    public void setMausac(MauSacModel mausac) {
+        this.mausac = mausac;
     }
 
-    public String getIddongsp() {
-        return iddongsp;
+    public DongSPModel getDongsp() {
+        return dongsp;
     }
 
-    public void setIddongsp(String iddongsp) {
-        this.iddongsp = iddongsp;
+    public void setDongsp(DongSPModel dongsp) {
+        this.dongsp = dongsp;
     }
+    
+    
 
     public int getNambh() {
         return nambh;

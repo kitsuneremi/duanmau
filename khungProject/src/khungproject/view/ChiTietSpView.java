@@ -77,9 +77,9 @@ public class ChiTietSpView extends javax.swing.JFrame {
             MauSacModel msm = new MauSacModel(ser.g(cbbmau.getSelectedItem().toString()).get(0), ser.g(cbbmau.getSelectedItem().toString()).get(1), ser.g(cbbmau.getSelectedItem().toString()).get(2));
             DongSPModel dspm = new DongSPModel(ser.g(cbbdongsp.getSelectedItem().toString()).get(0), ser.g(cbbdongsp.getSelectedItem().toString()).get(1), ser.g(cbbdongsp.getSelectedItem().toString()).get(2));
 
-            ctspm.setIdnsx(nsxm.getId());
-            ctspm.setIdmausac(msm.getId());
-            ctspm.setIddongsp(dspm.getId());
+            ctspm.setNsx(new NSXModel(nsxm.getId(), "", ""));
+            ctspm.setMausac(new MauSacModel(msm.getId(), "", ""));
+            ctspm.setDongsp(new DongSPModel(dspm.getId(), "", ""));
             ctspm.setNambh(Integer.parseInt(txtnambh.getText()));
             ctspm.setMota(txtmota.getText());
             ctspm.setSoluongsp(Integer.parseInt(txtslsp.getText()));

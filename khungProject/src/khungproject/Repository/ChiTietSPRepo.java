@@ -57,9 +57,9 @@ public class ChiTietSPRepo {
             ps.setString(1, rdn());
             ps.setString(2, ctspm.getSpm().getTen());
 
-            ps.setString(3, ctspm.getIdnsx());
-            ps.setString(4, ctspm.getIdmausac());
-            ps.setString(5, ctspm.getIddongsp());
+            ps.setString(3, ctspm.getNsx().getId());
+            ps.setString(4, ctspm.getMausac().getId());
+            ps.setString(5, ctspm.getDongsp().getId());
             ps.setInt(6, ctspm.getNambh());
             ps.setString(7, ctspm.getMota());
             ps.setInt(8, ctspm.getSoluongsp());
@@ -86,9 +86,9 @@ public class ChiTietSPRepo {
             ps1.executeUpdate();
 
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, ctspm.getIdnsx());
-            ps.setString(2, ctspm.getIdmausac());
-            ps.setString(3, ctspm.getIddongsp());
+            ps.setString(1, ctspm.getNsx().getId());
+            ps.setString(2, ctspm.getMausac().getId());
+            ps.setString(3, ctspm.getDongsp().getId());
             ps.setInt(4, ctspm.getNambh());
             ps.setString(5, ctspm.getMota());
             ps.setInt(6, ctspm.getSoluongsp());
@@ -115,12 +115,12 @@ public class ChiTietSPRepo {
             ps.close();
 
             PreparedStatement ps1 = conn.prepareStatement(sql2);
-            System.out.println("da den");
             ps1.setString(1, id);
             ps1.executeUpdate();
             ps1.close();
             return true;
         } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
 

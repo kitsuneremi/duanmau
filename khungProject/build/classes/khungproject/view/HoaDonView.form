@@ -450,9 +450,9 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="txtnice" min="-2" pref="178" max="-2" attributes="0"/>
+                  <Component id="txtsearch" min="-2" pref="178" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
-                  <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtstatus" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="327" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -469,8 +469,8 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtnice" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtstatus" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtsearch" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       </Group>
@@ -562,12 +562,12 @@
             <Property name="text" type="java.lang.String" value="san pham"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtnice">
+        <Component class="javax.swing.JTextField" name="txtsearch">
           <Events>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtniceFocusLost"/>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtsearchFocusLost"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel10">
+        <Component class="javax.swing.JLabel" name="txtstatus">
           <Properties>
             <Property name="text" type="java.lang.String" value="tr&#x1eeb; slsp ch&#x1b0;a l&#xe0;m :V"/>
           </Properties>
