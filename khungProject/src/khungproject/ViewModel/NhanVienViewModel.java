@@ -1,11 +1,12 @@
-package khungproject.DomainModels;
+package khungproject.ViewModel;
 
 import java.util.Date;
 
-public class NhanVienModel {
-    private String id,ma,ho,tendem,ten,sdt,diachi,matkhau,idguibc;
+public class NhanVienViewModel {
+
+    private String id, ma, ten, tendem, ho, diachi, sdt, matkhau, idch, idcv, idguibc;
+    int gioitinh, trangthai;
     Date ngaysinh;
-    int gioitinh,trangthai;
 
     public String getId() {
         return id;
@@ -23,12 +24,12 @@ public class NhanVienModel {
         this.ma = ma;
     }
 
-    public String getHo() {
-        return ho;
+    public String getTen() {
+        return ten;
     }
 
-    public void setHo(String ho) {
-        this.ho = ho;
+    public void setTen(String ten) {
+        this.ten = ten;
     }
 
     public String getTendem() {
@@ -39,20 +40,12 @@ public class NhanVienModel {
         this.tendem = tendem;
     }
 
-    public String getTen() {
-        return ten;
+    public String getHo() {
+        return ho;
     }
 
-    public void setTen(String ten) {
-        this.ten = ten;
-    }
-
-    public String getSdt() {
-        return sdt;
-    }
-
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
+    public void setHo(String ho) {
+        this.ho = ho;
     }
 
     public String getDiachi() {
@@ -63,6 +56,14 @@ public class NhanVienModel {
         this.diachi = diachi;
     }
 
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
     public String getMatkhau() {
         return matkhau;
     }
@@ -71,20 +72,28 @@ public class NhanVienModel {
         this.matkhau = matkhau;
     }
 
+    public String getIdch() {
+        return idch;
+    }
+
+    public void setIdch(String idch) {
+        this.idch = idch;
+    }
+
+    public String getIdcv() {
+        return idcv;
+    }
+
+    public void setIdcv(String idcv) {
+        this.idcv = idcv;
+    }
+
     public String getIdguibc() {
         return idguibc;
     }
 
     public void setIdguibc(String idguibc) {
         this.idguibc = idguibc;
-    }
-
-    public Date getNgaysinh() {
-        return ngaysinh;
-    }
-
-    public void setNgaysinh(Date ngaysinh) {
-        this.ngaysinh = ngaysinh;
     }
 
     public int getGioitinh() {
@@ -102,6 +111,12 @@ public class NhanVienModel {
     public void setTrangthai(int trangthai) {
         this.trangthai = trangthai;
     }
-    
-    
+
+    public Date getNgaysinh() {
+        return ngaysinh;
+    }
+
+    public void setNgaysinh(Date ngaysinh) {
+        this.ngaysinh = ngaysinh;
+    }
 }
